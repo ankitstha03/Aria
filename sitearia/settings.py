@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'Ariadata',
         'USER': 'postgres',
         'PASSWORD': 'ARIAaria',
-        'HOST': '',
+        'HOST': 'localhost',
         'PORT': '',
 
     }
