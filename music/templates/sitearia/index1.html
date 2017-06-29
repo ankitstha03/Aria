@@ -1,0 +1,22 @@
+{% load staticfiles %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'music/styles.css' %}" />
+
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <div class="navbar-header">
+
+            <a class="navbar-brand" href="{% url 'index1' %}"><img src="{% static 'music/images/arialogo.png' %}" style="position: absolute; top:5; left:5;"></a>
+        </div>
+    </div>
+</nav>
+
+<img src="{% static 'sitearia/aria.gif' %}"style="position:relative; width:100%; height:auto; top:55; margin:0 auto;">
+<br>
+ <form class="navbar-form navbar-center" role="search" method="get" action="#"style="position:relative; left:400; top:100;">                <div class="form-group">
+                    <input type="text" class="form-control" name="q" value="Start your music Euphoria" style="width:400;">
+                </div>
+                <button type="submit" class="btn btn-default">Search</button>
+            </form>
