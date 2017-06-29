@@ -42,7 +42,7 @@ class Song:
                 self.similarity.append(hdf5_getters.get_similar_artists(h5))
                 self.tempo.append(hdf5_getters.get_tempo(h5))
                 self.year.append(hdf5_getters.get_year(h5))
-                self.familiarity.append(hdf5_getters.get_artist_familiarity())
+                self.familiarity.append(hdf5_getters.get_artist_familiarity(h5))
                 self.endoffade.append(hdf5_getters.get_end_of_fade_in(h5))
                 h5.close()
 
