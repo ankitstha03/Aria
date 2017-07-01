@@ -49,12 +49,12 @@ class User(models.Model):
     """
     last_name = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
-    username = models.CharField(max_length=30)
-    email = models.EmailField(max_length=120)
+    #username = models.CharField(max_length=30)
+    email = models.EmailField(max_length=120,unique=True, db_index=True, primary_key=True)
     user_type = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.username
+        return self.email
 
 class Playlist(models.Model):
     """
