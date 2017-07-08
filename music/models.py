@@ -1,143 +1,45 @@
 """Implementation of models from ERD"""
 
+from __future__ import unicode_literals
 from django.db import models
-
-# Create your models here.
-class Song(models.Model):
+from django.utils.translation import ugettext_lazy as _
+from utils.models import UrlMixin
+from utils.models import CreationModificationDateMixin
+class Artist(CreationModificationDateMixin):
     """
-    This is table containg the list of song Name
+    A table to store the artist information
     """
-
-    song_title = models.CharField(max_length=250)
-
-    def __str__(self):
-        return self.song_title
-
-
-class Album(models.Model):
-
-    """
-    This table contains Album, with Name and Year
-    """
-    Album_title = models.CharField(max_length=500)
-    album_year = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.Album_title
-
-
-class Artist(models.Model):
-    """
-    This is  Artist table, which has Artist's name
-    """
-    name = models.CharField(max_length=250)
-
-
-class Keyword(models.Model):
-
-    """
-    This is a keyword that is used to identify the relation on table
-    """
-    word = models.CharField(max_length=250)
-
-    def __str__(self):
-        return self.word
-
-class User(models.Model):
-    """
-    Contains the User table identifying the User.
-    """
-    last_name = models.CharField(max_length=30)
-    first_name = models.CharField(max_length=30)
-    #username = models.CharField(max_length=30)
-    email = models.EmailField(max_length=120,unique=True, db_index=True, primary_key=True)
-    user_type = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.email
-
-class Playlist(models.Model):
-    """
-    It contains a different songs that should be in a given Playlist
-    """
-    song_id = models.ManyToManyField(Song)
-
-class UserPlaylist(models.Model):
-    """
-    It links to those playlist for individual user.
-    """
-    playlist_id = models.OneToOneField(Playlist, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-
-class Genre(models.Model):
-    """
-    A list of Genre for a given song.
-    """
-    name = models.CharField(max_length=500)
+    artist_id = models.PositiveIntegerField(primary_key=True)
+    name = models.CharField(_("Name"), max_length=50)
+    tag = models.CharField(_("Tag"), max_length=50)
+    Location = models.CharField(_("Location"), max_length=100)
+    familiarity = models.CharField(_("Familiarity"), max_length=10)
 
     def __str__(self):
         return self.name
 
-class SongAlbum(models.Model):
+class Album(CreationModificationDateMixin):
     """
-    This contains list of songs for a given album.
+    A table storing the album related information like name, year, genre, and artist_id
     """
-    song_id = models.ManyToManyField(Song)
-    album_id = models.OneToOneField(Album, on_delete=models.CASCADE)
+    name = models.CharField(_("Name"), max_length=50)
+    genre = models.CharField(_("Genre"), max_length=50)
+    year = models.IntegerField(_("Year"))
+    artist_id = models.ForeignKey(Artist)
 
-class SongRating(models.Model):
+class Song(CreationModificationDateMixin):
     """
-    It is a table for containing the rating for given song from multiple users.
+    A song table storing title, genre, playback time, album id
     """
-    rating = models.CharField(max_length=5)
-    user_id = models.ManyToManyField(User)
-    song_id = models.OneToOneField(Song, on_delete=models.CASCADE)
+    title = models.CharField(_("Title"), max_length=200)
+    genre = models.CharField(_("Genre"), max_length=50)
+    playback_time = models.CharField(_("PlayBackTime"), max_length=5)
+    artist_id = models.ForeignKey(Artist)
+    album_id = models.ForeignKey(Album)
 
-class SongArtist(models.Model):
+class playlist(CreationModificationDateMixin):
     """
-    Relates the number of songs for a given Artist
+    This contains the playlist name, the songs included in the playlist, and the user_id for the given Playlist
     """
-    song_id = models.ManyToManyField(Song)
-    artist_id = models.OneToOneField(Artist, on_delete=models.CASCADE)
-
-class SongGenre(models.Model):
-    """
-    links to the Genre for given song
-    """
-    genre_id = models.ManyToManyField(Genre)
-    song_id = models.OneToOneField(Song, on_delete=models.CASCADE)
-
-class ArtistKeyword(models.Model):
-    """
-    Identifying Artist using keyword
-    """
-    keyword_id = models.ManyToManyField(Keyword)
-    artist_id = models.OneToOneField(Artist, on_delete=models.CASCADE)
-
-class SongKeyword(models.Model):
-    """
-    Identifying the song from given keyword
-    """
-    keyword_id = models.ManyToManyField(Keyword)
-    song_id = models.OneToOneField(Song, on_delete=models.CASCADE)
-
-class AlbumKeyword(models.Model):
-    """
-    Identifying albums from keyword
-    """
-    album_id = models.OneToOneField(Album, on_delete=models.CASCADE)
-    keyword_id = models.ManyToManyField(Keyword)
-
-class PlaylistKeyword(models.Model):
-    """
-    Identifying Playlist from keyword
-    """
-    playslist_id = models.OneToOneField(Playlist, on_delete=models.CASCADE)
-    keyword_id = models.ManyToManyField(Keyword)
-
-class RatingKeyword(models.Model):
-    """
-    Identifying Playlist from keyword
-    """
-    rating_id = models.OneToOneField(SongRating, on_delete=models.CASCADE)
-    keyword_id = models.ManyToManyField(Keyword)
+    name = models.CharField(_("Playlist Name"), max_length=50)
+    song_id = models.ForeignKey(Song)
