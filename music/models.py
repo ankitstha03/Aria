@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from utils.models import UrlMixin
 from utils.models import CreationModificationDateMixin
+
 class Artist(CreationModificationDateMixin):
     """
     A table to store the artist information
@@ -22,20 +23,28 @@ class Album(CreationModificationDateMixin):
     """
     A table storing the album related information like name, year, genre, and artist_id
     """
+    album_id = models.PositiveIntegerField(primary_key=True)
     name = models.CharField(_("Name"), max_length=50)
     genre = models.CharField(_("Genre"), max_length=50)
     year = models.IntegerField(_("Year"))
     artist_id = models.ForeignKey(Artist)
 
+    def __str__(self):
+        return self.name
+
 class Song(CreationModificationDateMixin):
     """
     A song table storing title, genre, playback time, album id
     """
+    song_id = models.PositiveIntegerField(primary_key=True, default=1)
     title = models.CharField(_("Title"), max_length=200)
     genre = models.CharField(_("Genre"), max_length=50)
     playback_time = models.CharField(_("PlayBackTime"), max_length=5)
     artist_id = models.ForeignKey(Artist)
     album_id = models.ForeignKey(Album)
+
+    def __str__(self):
+        return self.title
 
 class playlist(CreationModificationDateMixin):
     """
