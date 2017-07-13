@@ -1,0 +1,9 @@
+<h1>Albums </h1>
+<ul>
+{% for album in album_list  %}
+    <li>{{ album.name }} - {{ album.genre }}</li>
+{% empty %}
+    <li>No articles yet.</li>
+{% endfor %}
+</ul>
+
