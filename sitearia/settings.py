@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'profile_display.apps.ProfileDisplayConfig',
 ]
 SITE_ID = 1
 MIDDLEWARE = [
@@ -84,7 +85,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'ARIAaria',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5678',
 
     }
 }

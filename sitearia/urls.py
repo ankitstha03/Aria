@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^connection$', connection.page , name="public_connection"),
     url(r'^create_user$', create_user.page, name="create_user"),
     url(r'^myadmin/', include('myAdmin.urls')),
+    url(r'^profile/', include('profile_display.urls')),
 ]
