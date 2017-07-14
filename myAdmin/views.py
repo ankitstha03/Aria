@@ -1,3 +1,10 @@
+"""
+File: views.py
+Author: Shailesh Mishra
+Github: https://github.com/rezera
+Description: A views for implementation of CRUD.
+"""
+
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, DetailView
@@ -8,16 +15,17 @@ class AlbumView(ListView):
     model = Album
     paginated = 25
 
-class SongView(DetailView):
-    model = Song
+class AlbumDetails(DetailView):
+    model = Album
 
 class AlbumCreate(CreateView):
-    model = Song
+    model = Album
     fields = '__all__'
+
 class AlbumUpdate(UpdateView):
-    model = Song
+    model = Album
     fields = '__all__'
 
 class AlbumDelete(DeleteView):
-    model = Song
-    success_url = reverse_lazy('Music')
+    model = Album
+    success_url = reverse_lazy('AlbumList')
