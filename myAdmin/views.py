@@ -29,3 +29,11 @@ class AlbumUpdate(UpdateView):
 class AlbumDelete(DeleteView):
     model = Album
     success_url = reverse_lazy('AlbumList')
+
+class SongView(ListView):
+    model = Song
+    pagninated = 40
+
+class SongCreate(CreateView):
+    model = Song
+    fields = '__all__'

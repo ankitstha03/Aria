@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now as timezone_now
 from django.conf import settings
-
+from django.db.models import QuerySet
 
 class UrlMixin(models.Model):
     """
@@ -49,6 +49,31 @@ class UrlMixin(models.Model):
     def get_absolute_url(self):
         return self.get_url_path()
 
+class SoftDeletionManager(models.Manager):
+    def __init__(self, *args, **kwargs):
+        self.alive_only = kwargs.pop('alive_only', True)
+        super(SoftDeletionManager, self).__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        if self.alive_only:
+            return SoftDeletionQuerySet(self.model).filter(deleted=None)
+        return SoftDeletionQuerySet(self.model)
+
+    def hard_delete(self):
+        return self.get_queryset().hard_delete()
+
+class SoftDeletionQuerySet(QuerySet):
+    def delete(self):
+        return super(SoftDeletionQuerySet, self).update(deleted=timezone.now())
+
+    def hard_delete(self):
+        return super(SoftDeletionQuerySet, self).delete()
+
+    def alive(self):
+        return self.filter(deleted=None)
+
+    def dead(self):
+        return self.exclude(deleted=None)
 
 class CreationModificationDateMixin(models.Model):
     """
@@ -58,6 +83,10 @@ class CreationModificationDateMixin(models.Model):
     created = models.DateTimeField(_("Creation date and time"), editable = False)
 
     modified = models.DateTimeField(_("modification date and time"), null=True, editable=False)
+    
+    deleted = models.DateTimeField(_("deteled date"), null=True, blank=True)
+    objects = SoftDeletionManager()
+    all_objects = SoftDeletionManager(alive_only=False)
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -69,6 +98,13 @@ class CreationModificationDateMixin(models.Model):
 
             super(CreationModificationDateMixin, self).save(*args, **kwargs)
     save.alters_data = True
+    def delete(self):
+        self.deleted = timezone.now()
+        self.save()
+    def hard_delete(self):
+        super(CreationModificationDateMixin, self).delete()
 
     class Meta:
         abstract = True
+
+
