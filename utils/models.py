@@ -64,7 +64,7 @@ class SoftDeletionManager(models.Manager):
 
 class SoftDeletionQuerySet(QuerySet):
     def delete(self):
-        return super(SoftDeletionQuerySet, self).update(deleted=timezone.now())
+        return super(SoftDeletionQuerySet, self).update(deleted=timezone_now())
 
     def hard_delete(self):
         return super(SoftDeletionQuerySet, self).delete()
@@ -83,8 +83,7 @@ class CreationModificationDateMixin(models.Model):
     created = models.DateTimeField(_("Creation date and time"), editable = False)
 
     modified = models.DateTimeField(_("modification date and time"), null=True, editable=False)
-    
-    deleted = models.DateTimeField(_("deteled date"), null=True, blank=True)
+    deleted = models.DateTimeField(_("deteled date"), null=True, blank=True, editable=False)
     objects = SoftDeletionManager()
     all_objects = SoftDeletionManager(alive_only=False)
 
@@ -99,7 +98,7 @@ class CreationModificationDateMixin(models.Model):
             super(CreationModificationDateMixin, self).save(*args, **kwargs)
     save.alters_data = True
     def delete(self):
-        self.deleted = timezone.now()
+        self.deleted = timezone_now()
         self.save()
     def hard_delete(self):
         super(CreationModificationDateMixin, self).delete()
