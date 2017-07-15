@@ -16,9 +16,6 @@ def page(request):
 	# In this line, the login() function allows the user to connect.
                 if request.GET.get('next') is not None:
                     return redirect(request.GET['next'])
-                profile = 'profile/'+str(user.id)
-                return redirect(profile)
-
         else:
             return render(request, 'en/public/connection.html', {'form' : form})
     else:

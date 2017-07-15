@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from authentication.views import logout
 from . import views
 
 admin.autodiscover()
@@ -23,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^music/', include('music.urls')),
     url(r'^$', views.index1, name='index1'),
+    url(r'^logout$', logout.page, name="logout"),
     url(r'^myadmin/', include('myAdmin.urls')),
     url(r'^profile/', include('profile_display.urls')),
     url(r'^login/', include('authentication.urls')),
