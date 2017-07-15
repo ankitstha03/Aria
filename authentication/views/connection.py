@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django import forms
 from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
 # This line allows you to import the necessary functions of the authentication module.
 def page(request):
     if request.POST:
@@ -15,12 +16,15 @@ def page(request):
 	# In this line, the login() function allows the user to connect.
                 if request.GET.get('next') is not None:
                     return redirect(request.GET['next'])
+                profile = 'profile/'+str(user.id)
+                return redirect(profile)
 
         else:
             return render(request, 'en/public/connection.html', {'form' : form})
     else:
         form = Form_connection()
     return render(request, 'en/public/connection.html', {'form' : form})
+
 class Form_connection(forms.Form):
     username = forms.CharField(label="Login")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)

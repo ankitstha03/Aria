@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^$', views.index1, name='index1'),
     url(r'^myadmin/', include('myAdmin.urls')),
     url(r'^profile/', include('profile_display.urls')),
-    url(r'^authentication/', include('authentication.urls')),
+    url(r'^login/', include('authentication.urls')),
 ]
