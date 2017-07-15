@@ -1,9 +1,14 @@
 <h1>Albums </h1>
 <ul>
+
+	<a href= {% url "album_add" %}>Add Album</a>
 {% for album in album_list  %}
     <li>{{ album.name }} - {{ album.genre }}</li>
-	<button type="submit" class="btn btn-success">Delete</button>
 
+	<a href= {% url 'album_update' album.pk %}>Update Album</a>
+	<a href= {% url 'album_delete' album.pk %}>Delete Album</a>
+	</br>
+	</br>
 {% empty %}
     <li>No albums yet.</li>
 {% endfor %}

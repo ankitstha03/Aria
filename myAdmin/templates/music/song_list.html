@@ -1,11 +1,16 @@
 <h1>Songs </h1>
 <ul>
+	<a href= {% url "song_add" %}>Add Song</a>
 {% for song in song_list  %}
     <li>{{ song.name }} - {{ song.genre }}</li>
-	<button type="submit" class="btn btn-success">delete</button>
+	<a href= {% url 'song_update' song.pk %}>Update Song</a>
+	<a href= {% url 'song_delete' song.pk %}>Delete Song</a>
+	</br>
+	</br>
 
 {% empty %}
     <li>no songs yet.</li>
 {% endfor %}
 </ul>
+
 

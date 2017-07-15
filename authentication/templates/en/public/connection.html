@@ -7,7 +7,7 @@
             Your email : {{ user.email }}
             <!-- In this line, if the user is connected, this line will display his e-mail address.-->
         </p>
-	<a href="logout">logout</a>
+	<a href={% url "logout" %} >logout</a>
     {% else %}
         <!-- In this line, if the user is not connected, we display the login form.-->
         <h1>Connexion</h1>
