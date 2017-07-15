@@ -13,7 +13,7 @@ class Profile(LoginRequiredMixin, DetailView):
     login_url = '/login/'
     model = UserProfiles
 
-@login_required
+
 def home(request):
     return HttpResponseRedirect(reverse('profile_display:profile', args=[request.user.id]))
 

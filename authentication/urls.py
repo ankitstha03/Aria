@@ -5,5 +5,4 @@ from django.contrib.auth.views import LoginView
 urlpatterns = [
     url('^$',LoginView.as_view(template_name='en/public/connection.html'), name="login"),
     url(r'^signup$', create_user.page, name="create_user"),
-    url(r'^logout$', logout.page, name="logout"),
 ]
