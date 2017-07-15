@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from utils.models import CreationModificationDateMixin
 from django.contrib import admin
+from authentication.models import UserProfiles
 class Artist(CreationModificationDateMixin):
     """
     A table to store the artist information
@@ -51,11 +52,14 @@ class playlist(CreationModificationDateMixin):
     for the given Playlist
     """
     name = models.CharField(_("Playlist Name"), max_length=50)
-    song_id = models.ForeignKey(Song, default=1)
+    song_id = models.ManyToManyField(Song)
+    user_id = models.ForeignKey(UserProfiles)
     playlist_id = models.PositiveIntegerField(primary_key=True, default=1)
+
     def __str__(self):
         return self.name
 from django.contrib import admin
+
 
 class SoftDeleteAdmin(admin.ModelAdmin):
     list_display = ('album_id', 'deleted_at',)
@@ -65,4 +69,5 @@ class SoftDeleteAdmin(admin.ModelAdmin):
         qs = Album.all_objects.all()
         if request.user.is_superuser:
             return qs
+
 
