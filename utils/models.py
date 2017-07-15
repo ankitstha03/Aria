@@ -56,24 +56,27 @@ class SoftDeletionManager(models.Manager):
 
     def get_queryset(self):
         if self.alive_only:
-            return SoftDeletionQuerySet(self.model).filter(deleted=None)
+            return SoftDeletionQuerySet(self.model).filter(deleted_at=None)
         return SoftDeletionQuerySet(self.model)
 
     def hard_delete(self):
         return self.get_queryset().hard_delete()
 
+    def all_with_deleted(self):
+        return super(SoftDeletionManager, self).get_queryset()
+
 class SoftDeletionQuerySet(QuerySet):
     def delete(self):
-        return super(SoftDeletionQuerySet, self).update(deleted=timezone_now())
+        return super(SoftDeletionQuerySet, self).update(deleted_at=timezone_now())
 
     def hard_delete(self):
         return super(SoftDeletionQuerySet, self).delete()
 
     def alive(self):
-        return self.filter(deleted=None)
+        return self.filter(deleted_at=None)
 
     def dead(self):
-        return self.exclude(deleted=None)
+        return self.exclude(deleted_at=None)
 
 class CreationModificationDateMixin(models.Model):
     """
@@ -83,9 +86,8 @@ class CreationModificationDateMixin(models.Model):
     created = models.DateTimeField(_("Creation date and time"), editable = False)
 
     modified = models.DateTimeField(_("modification date and time"), null=True, editable=False)
-    deleted = models.DateTimeField(_("deteled date"), null=True, blank=True, editable=False)
+    deleted_at = models.DateTimeField(_("deteled date"), null=True, blank=True, editable=False)
     objects = SoftDeletionManager()
-    all_objects = SoftDeletionManager(alive_only=False)
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -97,8 +99,9 @@ class CreationModificationDateMixin(models.Model):
 
             super(CreationModificationDateMixin, self).save(*args, **kwargs)
     save.alters_data = True
+
     def delete(self):
-        self.deleted = timezone_now()
+        self.deleted_at = timezone_now()
         self.save()
     def hard_delete(self):
         super(CreationModificationDateMixin, self).delete()

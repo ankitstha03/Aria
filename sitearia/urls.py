@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from authentication.views import connection, create_user
 from . import views
 
 admin.autodiscover()
@@ -24,8 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^music/', include('music.urls')),
     url(r'^$', views.index1, name='index1'),
-    url(r'^connection$', connection.page , name="public_connection"),
-    url(r'^create_user$', create_user.page, name="create_user"),
     url(r'^myadmin/', include('myAdmin.urls')),
     url(r'^profile/', include('profile_display.urls')),
+    url(r'^authentication/', include('authentication.urls')),
 ]
