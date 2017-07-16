@@ -34,8 +34,12 @@ class AlbumDelete(DeleteView):
     success_url = reverse_lazy('AlbumList')
 
 class SongView(ListView):
-    model = Song
+    template_name =  'music/song_list.html'
     pagninated = 40
+    def get_queryset(self):
+        qs = Song.objects.all()
+        print(qs)
+        return qs
 
 class SongCreate(CreateView):
     model = Song
@@ -45,7 +49,6 @@ class SongCreate(CreateView):
 class SongDelete(DeleteView):
     model = Song
     success_url = reverse_lazy('SongList')
-
 class SongUpdate(UpdateView):
     model = Song
     fields = '__all__'

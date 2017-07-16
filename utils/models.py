@@ -88,7 +88,7 @@ class CreationModificationDateMixin(models.Model):
     modified = models.DateTimeField(_("modification date and time"), null=True, editable=False)
     deleted_at = models.DateTimeField(_("deteled date"), null=True, blank=True, editable=False)
     objects = SoftDeletionManager()
-
+    all_objects = SoftDeletionManager(alive_only=False)
     def save(self, *args, **kwargs):
         if not self.pk:
             self.created = timezone_now()
@@ -103,6 +103,7 @@ class CreationModificationDateMixin(models.Model):
     def delete(self):
         self.deleted_at = timezone_now()
         self.save()
+
     def hard_delete(self):
         super(CreationModificationDateMixin, self).delete()
 

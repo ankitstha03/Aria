@@ -69,5 +69,3 @@ class SoftDeleteAdmin(admin.ModelAdmin):
         qs = Album.all_objects.all()
         if request.user.is_superuser:
             return qs
-
-
