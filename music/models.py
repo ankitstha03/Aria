@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from utils.models import CreationModificationDateMixin
 from django.contrib import admin
+import uuid
 from authentication.models import UserProfiles
 class Artist(CreationModificationDateMixin):
     """
@@ -14,7 +15,7 @@ class Artist(CreationModificationDateMixin):
     tag = models.CharField(_("Tag"), max_length=50)
     Location = models.CharField(_("Location"), max_length=100)
     familiarity = models.CharField(_("Familiarity"), max_length=10)
-    artist_id = models.PositiveIntegerField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.name
@@ -27,8 +28,8 @@ class Album(CreationModificationDateMixin):
     genre = models.CharField(_("Genre"), max_length=50)
     year = models.IntegerField(_("Year"))
     artist_id = models.ForeignKey(Artist)
-    album_id = models.PositiveIntegerField(primary_key=True)
-
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    
     def __str__(self):
         return self.name
 
@@ -42,7 +43,8 @@ class Song(CreationModificationDateMixin):
     playback_time = models.CharField(_("PlayBackTime"), max_length=5)
     artist_id = models.ForeignKey(Artist)
     album_id = models.ForeignKey(Album)
-    song_id = models.PositiveIntegerField(primary_key=True, default=1)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    #file_field = models.FileField(upload_to="./songs/",default = "./songs/test.mp3")
     def __str__(self):
         return self.title
 
@@ -54,15 +56,13 @@ class playlist(CreationModificationDateMixin):
     name = models.CharField(_("Playlist Name"), max_length=50)
     song_id = models.ManyToManyField(Song)
     user_id = models.ForeignKey(UserProfiles)
-    playlist_id = models.PositiveIntegerField(primary_key=True, default=1)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.name
 from django.contrib import admin
-
-
 class SoftDeleteAdmin(admin.ModelAdmin):
-    list_display = ('album_id', 'deleted_at',)
+    list_display = ('name', 'deleted_at',)
     list_filter = ('deleted_at',)
 
     def queryset(self, request):

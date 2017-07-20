@@ -9,10 +9,13 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
 from music.models import Song, Album
 # Create your views here.
+@login_required
 def home(request):
-    return render(request, 'myAdmin/admin.html')
+    return render(request, 'layouts/admin/base.html')
+
 class AlbumView(ListView):
     model = Album
     paginated = 25
@@ -36,6 +39,7 @@ class AlbumDelete(DeleteView):
 class SongView(ListView):
     template_name =  'music/song_list.html'
     pagninated = 40
+
     def get_queryset(self):
         qs = Song.objects.all()
         print(qs)
@@ -49,6 +53,8 @@ class SongCreate(CreateView):
 class SongDelete(DeleteView):
     model = Song
     success_url = reverse_lazy('SongList')
+
 class SongUpdate(UpdateView):
     model = Song
     fields = '__all__'
+    success_url = reverse_lazy('SongList')

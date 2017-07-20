@@ -1,5 +1,5 @@
-<h1>Songs </h1>
-<ul>
+{% extends 'D:/Projects/Aria/templates/layouts/admin/base.html' %}
+{% block content %}
 	<a href= {% url "song_add" %}>Add Song</a>
 {% for song in song_list  %}
     <li>{{ song.title }} - {{ song.genre }}</li>
@@ -11,6 +11,5 @@
 {% empty %}
     <li>no songs yet.</li>
 {% endfor %}
-</ul>
-
+{% endblock %}
 

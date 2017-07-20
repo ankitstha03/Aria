@@ -1,6 +1,5 @@
-<h1>Albums </h1>
-<ul>
-
+{% extends 'D:/Projects/Aria/templates/layouts/admin/base.html' %}
+{% block content %}
 	<a href= {% url "album_add" %}>Add Album</a>
 {% for album in album_list  %}
     <li>{{ album.name }} - {{ album.genre }}</li>
@@ -12,5 +11,4 @@
 {% empty %}
     <li>No albums yet.</li>
 {% endfor %}
-</ul>
-
+{% endblock %}

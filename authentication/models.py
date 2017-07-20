@@ -16,8 +16,15 @@ class UserProfiles(CreationModificationDateMixin):
     User profile with extended  user model.
     The default user model is extended with addition of following fields.
     """
+    ARTIST = 1
+    USER = 2
+    ROLE_CHOICE = (
+            (ARTIST, 'Artist'),
+            (USER, 'User'),
+            )
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    new_userid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     username = models.CharField(_("Username"), max_length=20, default='username')
+    #user_role = models.IntegerField(max_length=1, null=True, choices=ROLE_CHOICE)
     bio = models.TextField(_("About"), max_length=500, default='')
     location = models.CharField(_("Location"), max_length=9, default='NEP')

@@ -57,6 +57,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'sitearia.urls'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL='/profile/home'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    '/var/www/static/',
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -128,4 +133,3 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
