@@ -29,7 +29,7 @@ class Album(CreationModificationDateMixin):
     year = models.IntegerField(_("Year"))
     artist_id = models.ForeignKey(Artist)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    
+
     def __str__(self):
         return self.name
 
@@ -44,7 +44,7 @@ class Song(CreationModificationDateMixin):
     artist_id = models.ForeignKey(Artist)
     album_id = models.ForeignKey(Album)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    #file_field = models.FileField(upload_to="./songs/",default = "./songs/test.mp3")
+    audio = models.FileField(upload_to="songs",default = "songs/test.mp3")
     def __str__(self):
         return self.title
 
