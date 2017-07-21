@@ -38,8 +38,8 @@ def page(request):
             user.save()
             return HttpResponse("User Created")
         else:
-            return render(request, 'en/public/create_user.html', {'form' : form})
+            return render(request, 'en/public/LOGIN.html', {'form' : form})
     else:
         form = Form_inscription()
     form = Form_inscription()
-    return render(request, 'en/public/create_user.html', {'form' : form})
+    return render(request, 'en/public/LOGIN.html', {'form' : form})
