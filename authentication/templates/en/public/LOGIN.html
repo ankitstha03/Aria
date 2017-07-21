@@ -144,11 +144,11 @@
            <form class="form-horizontal"  role="form" style=" margin-left:50%; margin-right:-10%;" action="{% url 'authen:login'%}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                     <div class="c5 noleftmargin">
-                        <input id="id_username" maxlength="30" name="username" type="text">
+                        <input id="id_username" maxlength="30" name="username" type="text" placeholder="Username">
                     </div>
 
                     <div class="c5 noleftmargin">
-                        <input id="id_password" maxlength="30" name="password" type="password">
+                        <input id="id_password" maxlength="30" name="password" type="password" placeholder="Password">
                     </div>
 
                 <div class="form-group">
@@ -195,9 +195,12 @@
               {{ form.first_name }}
             </div>
             <div class="c6 noleftmargin" style="padding:0 0 0 0px; " >
-              {{ form.username }}
+              {{ form.last_name }}
             </div>
-            <div class="c6 noleftmargin" style="padding:0 0 0 0px;">
+            <div class="c12 noleftmargin" style="padding:0 0 0 0px;">
+                {{ form.username }}
+            </div>
+			  <div class="c12 noleftmargin" style="padding:0 0 0 0px;">
                 {{ form.email }}
             </div>
               <div class="c12 noleftmargin" style="padding:0 0 0 0px;">
