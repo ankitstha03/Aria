@@ -62,7 +62,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary"><a href="{% url "logout" %}"  style="text-decoration:none;">Logout</a></button>
+                    <button type="button" class="btn btn-primary"><a href="{% url "authen:logout" %}"  style="text-decoration:none;">Logout</a></button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -173,9 +173,3 @@
     {% endblock extra_js %}
 </body>
 </html>
-
-
-
-
-
-

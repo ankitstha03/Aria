@@ -1,4 +1,4 @@
-{% extends 'D:/Projects/Aria/templates/layouts/admin/base.html' %}
+{% extends 'layouts/admin/base.html' %}
 {% block content %}
 	<a href= {% url "song_add" %}>Add Song</a>
 {% for song in song_list  %}
@@ -12,4 +12,3 @@
     <li>no songs yet.</li>
 {% endfor %}
 {% endblock %}
-

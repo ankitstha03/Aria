@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import UserForm
 from django import forms
 from django.core.urlresolvers import reverse
@@ -14,7 +14,7 @@ def logout_user(request):
     context = {
         "form": form,
     }
-    return render(request, 'en/public/LOGIN.html', context)
+    return redirect('authen:register')
 
 def login_user(request):
     form = UserForm(request.POST or None)
@@ -29,7 +29,7 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'sitearia/HOME.html')
+                return redirect('index1')
             else:
                 return render(request, 'en/public/LOGIN.html', context)
         else:
@@ -53,7 +53,7 @@ def register(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return render(request, 'sitearia/HOME.html')
+                return redirect('index1')
     context = {
         "form": form,
     }
