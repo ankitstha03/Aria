@@ -56,7 +56,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'sitearia.urls'
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL='/profile/home'
+LOGIN_REDIRECT_URL='/login/home'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

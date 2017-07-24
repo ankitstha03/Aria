@@ -12,43 +12,44 @@ from django.utils.timezone import now as timezone_now
 from django.conf import settings
 from django.db.models import QuerySet
 
-class UrlMixin(models.Model):
-    """
-    A replacement for get_absolute_url()
-    Models extending this mixn should have
-    either get_url or get_url_path implemented
-    """
-    class Meta:
-        """
-        Abstraction
-        """
-        abstract = True
+#class UrlMixin(models.Model):
+#    """
+#    A replacement for get_absolute_url()
+#    Models extending this mixn should have
+#    either get_url or get_url_path implemented
+#    """
+#    class Meta:
+#        """
+#        Abstraction
+#        """
+#        abstract = True
+#
+#    def get_url(self):
+#        if hasattr(self.get_url_path, "dont_recurse"):
+#            raise NotImplementedError
+#        try:
+#            path = self.get_url_path()
+#        except NotImplementedError:
+#            raise
+#        website_url = getattr(settings, "DEFAULT_WEBSITE_URL", "http://127.0.0.1:8000")
+#        return website_url + path
+#    get_url.dont_recurse = True
+#
+#    def get_url_path(self):
+#        if hasattr(self.get_url, "dont_recurse"):
+#            raise NotImplementedError
+#        try:
 
-    def get_url(self):
-        if hasattr(self.get_url_path, "dont_recurse"):
-            raise NotImplementedError
-        try:
-            path = self.get_url_path()
-        except NotImplementedError:
-            raise
-        website_url = getattr(settings, "DEFAULT_WEBSITE_URL", "http://127.0.0.1:8000")
-        return website_url + path
-    get_url.dont_recurse = True
-
-    def get_url_path(self):
-        if hasattr(self.get_url, "dont_recurse"):
-            raise NotImplementedError
-        try:
-            url = self.get_url()
-        except NotImplementedError:
-            raise
-        bits = urlparse.urlparse(url)
-        return urlparse.urlunparse(("","") + bits[2:])
-    get_url_path.dont_recurse = True
-
-    def get_absolute_url(self):
-        return self.get_url_path()
-
+#            url = self.get_url()
+#        except NotImplementedError:
+#            raise
+#        bits = urlparse.urlparse(url)
+#        return urlparse.urlunparse(("","") + bits[2:])
+#    get_url_path.dont_recurse = True
+#
+#    def get_absolute_url(self):
+#        return self.get_url_path()
+#
 class SoftDeletionManager(models.Manager):
     def __init__(self, *args, **kwargs):
         self.alive_only = kwargs.pop('alive_only', True)
@@ -83,21 +84,22 @@ class CreationModificationDateMixin(models.Model):
     Abstract base class with creation and modification date and
     time
     """
-    created = models.DateTimeField(_("Creation date and time"), editable = False)
+    created_at = models.DateTimeField(_("Creation date and time"), editable = False)
 
-    modified = models.DateTimeField(_("modification date and time"), null=True, editable=False)
+    modified_at = models.DateTimeField(_("modification date and time"), null=True, editable=False)
     deleted_at = models.DateTimeField(_("deteled date"), null=True, blank=True, editable=False)
     objects = SoftDeletionManager()
     all_objects = SoftDeletionManager(alive_only=False)
+
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.created = timezone_now()
+            self.created_at = timezone_now()
         else:
-            if not self.created:
-                self.created = timezone_now()
-            self.modified = timezone_now()
+            if not self.created_at:
+                self.created_at = timezone_now()
+            self.modified_at = timezone_now()
 
-            super(CreationModificationDateMixin, self).save(*args, **kwargs)
+        super(CreationModificationDateMixin, self).save(*args, **kwargs)
     save.alters_data = True
 
     def delete(self):
@@ -109,5 +111,3 @@ class CreationModificationDateMixin(models.Model):
 
     class Meta:
         abstract = True
-
-

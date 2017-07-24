@@ -4,7 +4,7 @@ from django.conf import settings
 
 if settings.DEBUG:
     urlpatterns = [
-        url(r'^$',views.home, name='myadmin'),
+        url(r'^$', views.HomeView.as_view(), name='myadmin'),
         url(r'^album/$', views.AlbumView.as_view(), name='AlbumList'),
         url(r'^song/$', views.SongView.as_view(), name='SongList'),
         url(r'album/add/$', views.AlbumCreate.as_view(), name='album_add'),

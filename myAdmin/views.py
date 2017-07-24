@@ -7,14 +7,14 @@ Description: A views for implementation of CRUD.
 
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import ListView, DetailView
+from django.views.generic import View,ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from music.models import Song, Album
 # Create your views here.
-@login_required
-def home(request):
-    return render(request, 'layouts/admin/base.html')
+class HomeView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'layouts/admin/base.html')
 
 class AlbumView(ListView):
     model = Album

@@ -23,7 +23,6 @@ class UserProfiles(CreationModificationDateMixin):
             (USER, 'User'),
             )
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     username = models.CharField(_("Username"), max_length=20, default='username')
     #user_role = models.IntegerField(max_length=1, null=True, choices=ROLE_CHOICE)
     bio = models.TextField(_("About"), max_length=500, default='')
