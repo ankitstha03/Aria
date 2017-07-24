@@ -18,13 +18,13 @@ class Form_inscription(forms.Form):
         return self.cleaned_data
 
 class Form_connection(forms.Form):
-    username = forms.CharField(label="Login")
+    email = forms.CharField(label="Email")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
     def clean(self):
         cleaned_data = super(Form_connection, self).clean()
-        username = self.cleaned_data.get('username')
+        email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
-        if not authenticate(username=username, password=password):
+        if not authenticate(email=email, password=password):
             raise forms.ValidationError("Wrong login or passwsord")
         return self.cleaned_data
 
