@@ -1,20 +1,15 @@
-"""
-File: views.py
-Author: Shailesh Mishra
-Github: https://github.com/rezera
-Description: A views for implementation of CRUD.
-"""
-
+from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View,ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import get_user_model
 from music.models import Song, Album, Artist
-from myAdmin.forms import AlbumForm
-from music.views import *
+from myAdmin.forms import *
+from utils.views import *
 # Create your views here.
+
 User = get_user_model()
 class HomeView(LoginRequiredMixin, View):
     def get(self, request):
@@ -26,23 +21,41 @@ class AlbumView(ListView):
 
 class AlbumDetails(DetailView):
     model = Album
+
 class AlbumAddView(ArtistsMixin, View):
-   template_name = 'music/album_form.html'
+    template_name = 'music/album_form.html'
+    def get(self, request, *args, **kwargs):
+        addAlbumForm = AlbumForm()
+        return render(request, self.template_name, {'form': addAlbumForm})
 
-   def get(self, request, *args, **kwargs):
-       addAlbumForm = AlbumForm()
-       return render(request, self.template_name, {'form': addAlbumForm})
+    def post(self, request, *args, **kwargs):
+        form = AlbumForm(request.POST)
+        if form.is_valid():
+            albumObj = form.save(commit=False)
+            albumObj.artist = self.request.user
+            albumObj.save()
+            return HttpResponseRedirect(reverse('AlbumList'))
 
-   def post(self, request, *args, **kwargs):
-       form = AlbumForm(request.POST)
-       if form.is_valid():
-           albumObj = form.save(commit=False)
-           albumObj.artist = self.request.user
-           albumObj.save()
-           return HttpResponseRedirect('/')
+        else:
+            return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
 
-       else:
-           return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
+class SongAddView(ArtistsMixin, View):
+    template_name = 'music/song_form.html'
+    def get(self, request, *args, **kwargs):
+        addSongForm = SongForm()
+        return render(request, self.template_name, {'form': addSongForm})
+
+    def post(self, request, *args, **kwargs):
+        form = SongForm(request.POST)
+        if form.is_valid():
+            songObj = form.save(commit=False)
+            songObj.artist = self.request.user
+            songObj.save()
+            return HttpResponseRedirect(reverse('song_add'))
+
+        else:
+            return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
+
 
 class AlbumCreate(CreateView):
     model = Album

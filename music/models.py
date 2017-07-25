@@ -44,7 +44,7 @@ class Song(CreationModificationDateMixin):
     title = models.CharField(_("Title"), max_length=200)
     genre = models.CharField(_("Genre"), max_length=50)
     playback_time = models.CharField(_("PlayBackTime"), max_length=5)
-    artist = models.ForeignKey(Artist)
+    artist = models.ForeignKey(User)
     album = models.ForeignKey(Album)
     audio = models.FileField(upload_to="songs",default = "songs/test.mp3")
     def __str__(self):
