@@ -5,7 +5,8 @@ app_name='music'
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='music/index.html'), name='index'),
 
-    #url(r'^(?P<album_id>[0-9]+)/$', views.detail, name='detail'),
+    url(r'^playlist/$', views.PlaylistView.as_view(), name='playlist'),
+    url(r'playlist/add/$', views.PlaylistCreate.as_view(), name='playlist_add'),
 
     #url(r'^(?P<album_id>[0-9]+)/favorite$', views.favorite, name='favorite'),
 ]

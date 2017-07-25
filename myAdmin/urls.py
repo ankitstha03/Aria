@@ -10,7 +10,7 @@ if settings.DEBUG:
         url(r'^song/$', views.SongView.as_view(), name='SongList'),
         url(r'^artist/$', views.ArtistView.as_view(), name='ArtistList'),
 
-        url(r'album/add/$', views.AlbumCreate.as_view(), name='album_add'),
+        url(r'album/add/$', views.AlbumAddView.as_view(), name='album_add'),
         url(r'song/add/$', views.SongCreate.as_view(), name='song_add'),
         url(r'artist/add/$', views.ArtistCreate.as_view(), name='artist_add'),
 

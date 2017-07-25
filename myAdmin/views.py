@@ -10,8 +10,12 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View,ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from music.models import Song, Album, Artist
+from myAdmin.forms import AlbumForm
+from music.views import *
 # Create your views here.
+User = get_user_model()
 class HomeView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'layouts/admin/base.html')
@@ -22,10 +26,27 @@ class AlbumView(ListView):
 
 class AlbumDetails(DetailView):
     model = Album
+class AlbumAddView(ArtistsMixin, View):
+   template_name = 'music/album_form.html'
+
+   def get(self, request, *args, **kwargs):
+       addAlbumForm = AlbumForm()
+       return render(request, self.template_name, {'form': addAlbumForm})
+
+   def post(self, request, *args, **kwargs):
+       form = AlbumForm(request.POST)
+       if form.is_valid():
+           albumObj = form.save(commit=False)
+           albumObj.artist = self.request.user
+           albumObj.save()
+           return HttpResponseRedirect('/')
+
+       else:
+           return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
 
 class AlbumCreate(CreateView):
     model = Album
-    fields = '__all__'
+    fields = ['name', 'genre', 'year']
     success_url = reverse_lazy('song_add')
 
 class AlbumUpdate(UpdateView):

@@ -9,6 +9,9 @@ from utils.models import CreationModificationDateMixin
 from django.contrib import admin
 import uuid
 from authentication.models import UserProfiles
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 class Artist(CreationModificationDateMixin):
     """
     A table to store the artist information
@@ -28,7 +31,7 @@ class Album(CreationModificationDateMixin):
     name = models.CharField(_("Name"), max_length=50)
     genre = models.CharField(_("Genre"), max_length=50)
     year = models.IntegerField(_("Year"))
-    artist = models.ForeignKey(Artist)
+    artist = models.ForeignKey(User)
 
     def __str__(self):
         return self.name
@@ -47,7 +50,7 @@ class Song(CreationModificationDateMixin):
     def __str__(self):
         return self.title
 
-class playlist(CreationModificationDateMixin):
+class Playlist(CreationModificationDateMixin):
     """
     This contains the playlist name, the songs included in the playlist, and the user_id
     for the given Playlist

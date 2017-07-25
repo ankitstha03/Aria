@@ -1,0 +1,9 @@
+{% extends 'layouts/admin/base.html' %}
+{% block content %}
+
+{% for playlist in playlist_list  %}
+    <li>{{ playlist.name }}</li>
+	{% empty %}
+    <li>No Playlist Yet yet.</li>
+{% endfor %}
+{% endblock %}
