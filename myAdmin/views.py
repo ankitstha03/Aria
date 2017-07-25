@@ -15,7 +15,7 @@ class HomeView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, 'layouts/admin/base.html')
 
-class AlbumView(ListView):
+class AlbumView(ArtistsMixin, ListView):
     model = Album
     paginated = 25
 
@@ -39,6 +39,34 @@ class AlbumAddView(ArtistsMixin, View):
         else:
             return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
 
+class AlbumUpdate(ArtistsMixin, UpdateView):
+    model = Album
+    fields = '__all__'
+
+class AlbumDelete(ArtistsMixin, DeleteView):
+    model = Album
+    success_url = reverse_lazy('AlbumList')
+
+class ArtistView(AdministratorOnlyMixin, ListView):
+    model = Artist
+
+class ArtistDetails(AdministratorOnlyMixin, DetailView):
+    model = Artist
+
+class ArtistCreate(AdministratorOnlyMixin, CreateView):
+    model = Artist
+    fields = '__all__'
+    success_url = reverse_lazy('ArtistList')
+
+class ArtistUpdate(AdministratorOnlyMixin, UpdateView):
+    model = Artist
+    fields = '__all__'
+    success_url = reverse_lazy('ArtistList')
+
+class ArtistDelete(AdministratorOnlyMixin, DeleteView):
+    model = Artist
+    success_url = reverse_lazy('ArtistList')
+
 class SongAddView(ArtistsMixin, View):
     template_name = 'music/song_form.html'
     def get(self, request, *args, **kwargs):
@@ -56,42 +84,7 @@ class SongAddView(ArtistsMixin, View):
         else:
             return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
 
-
-class AlbumCreate(CreateView):
-    model = Album
-    fields = ['name', 'genre', 'year']
-    success_url = reverse_lazy('song_add')
-
-class AlbumUpdate(UpdateView):
-    model = Album
-    fields = '__all__'
-
-class AlbumDelete(DeleteView):
-    model = Album
-    success_url = reverse_lazy('AlbumList')
-
-class ArtistView(ListView):
-    model = Artist
-
-class ArtistDetails(DetailView):
-    model = Artist
-
-class ArtistCreate(CreateView):
-    model = Artist
-    fields = '__all__'
-    success_url = reverse_lazy('ArtistList')
-
-class ArtistUpdate(UpdateView):
-    model = Artist
-    fields = '__all__'
-    success_url = reverse_lazy('ArtistList')
-
-class ArtistDelete(DeleteView):
-    model = Artist
-    success_url = reverse_lazy('ArtistList')
-
-
-class SongView(ListView):
+class SongView(ArtistsMixin, ListView):
     template_name =  'music/song_list.html'
     pagninated = 40
 
@@ -100,12 +93,12 @@ class SongView(ListView):
         print(qs)
         return qs
 
-class SongCreate(CreateView):
+class SongCreate(ArtistsMixin, CreateView):
     model = Song
     fields = '__all__'
     success_url = reverse_lazy('SongList')
 
-class SongDelete(DeleteView):
+class SongDelete(ArtistsMixin, DeleteView):
     model = Song
     success_url = reverse_lazy('SongList')
 

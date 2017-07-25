@@ -35,7 +35,16 @@ class Album(CreationModificationDateMixin):
 
     def __str__(self):
         return self.name
+class Playlist(CreationModificationDateMixin):
+    """
+    This contains the playlist name, the songs included in the playlist, and the user_id
+    for the given Playlist
+    """
+    name = models.CharField(_("Playlist Name"), max_length=50)
+    user = models.ForeignKey(User)
 
+    def __str__(self):
+        return self.name
 
 class Song(CreationModificationDateMixin):
     """
@@ -46,18 +55,9 @@ class Song(CreationModificationDateMixin):
     playback_time = models.CharField(_("PlayBackTime"), max_length=5)
     artist = models.ForeignKey(User)
     album = models.ForeignKey(Album)
+    playlist = models.ForeignKey(Playlist, blank=True, null=True)
     audio = models.FileField(upload_to="songs",default = "songs/test.mp3")
     def __str__(self):
         return self.title
 
-class Playlist(CreationModificationDateMixin):
-    """
-    This contains the playlist name, the songs included in the playlist, and the user_id
-    for the given Playlist
-    """
-    name = models.CharField(_("Playlist Name"), max_length=50)
-    songs = models.ManyToManyField(Song)
-    user = models.ForeignKey(User)
 
-    def __str__(self):
-        return self.name
