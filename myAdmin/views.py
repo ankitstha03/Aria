@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View,ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from music.models import Song, Album
+from music.models import Song, Album, Artist
 # Create your views here.
 class HomeView(LoginRequiredMixin, View):
     def get(self, request):
@@ -35,6 +35,27 @@ class AlbumUpdate(UpdateView):
 class AlbumDelete(DeleteView):
     model = Album
     success_url = reverse_lazy('AlbumList')
+
+class ArtistView(ListView):
+    model = Artist
+
+class ArtistDetails(DetailView):
+    model = Artist
+
+class ArtistCreate(CreateView):
+    model = Artist
+    fields = '__all__'
+    success_url = reverse_lazy('ArtistList')
+
+class ArtistUpdate(UpdateView):
+    model = Artist
+    fields = '__all__'
+    success_url = reverse_lazy('ArtistList')
+
+class ArtistDelete(DeleteView):
+    model = Artist
+    success_url = reverse_lazy('ArtistList')
+
 
 class SongView(ListView):
     template_name =  'music/song_list.html'
