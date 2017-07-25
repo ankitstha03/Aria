@@ -57,7 +57,7 @@ class Playlist(CreationModificationDateMixin):
     """
     name = models.CharField(_("Playlist Name"), max_length=50)
     songs = models.ManyToManyField(Song)
-    user = models.ForeignKey(UserProfiles)
+    user = models.ForeignKey(User)
 
     def __str__(self):
         return self.name
