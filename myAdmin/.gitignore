@@ -1,6 +1,22 @@
-### Django ###
 *.log
 *.pot
 *.pyc
 __pycache__/
+local_settings.py
+db.sqlite3
+media
 migrations
+### Vim ###
+# swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+hello.txt
