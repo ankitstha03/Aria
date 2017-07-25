@@ -113,3 +113,41 @@ class SongUpdate(UpdateView):
     model = Song
     fields = '__all__'
     success_url = reverse_lazy('SongList')
+
+class PlaylistAddView(ArtistsMixin, View):
+   template_name = 'music/playlist_form.html'
+
+   def get(self, request, *args, **kwargs):
+       addPlaylistForm = PlaylistForm()
+       return render(request, self.template_name, {'form': addPlaylistForm})
+
+   def post(self, request, *args, **kwargs):
+       form = PlaylistForm(request.POST)
+       if form.is_valid():
+           playlistObj = form.save(commit=False)
+           playlistObj.user = self.request.user
+           playlistObj.save()
+           return HttpResponseRedirect(reverse_lazy('PlaylistList'))
+
+       else:
+           return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
+
+
+class PlaylistView(ListView):
+    model = Playlist
+    fields = '__all__'
+
+class PlaylistCreate(CreateView):
+    model = Playlist
+    fields = '__all__'
+    success_url = reverse_lazy('PlaylistList')
+
+class PlaylistDelete(DeleteView):
+    model = Playlist
+    fields = '__all__'
+    success_url = reverse_lazy('PlaylistList')
+
+class PlaylistUpdate(UpdateView):
+    model = Playlist
+    fields = '__all__'
+    success_url = reverse_lazy('PlaylistList')
