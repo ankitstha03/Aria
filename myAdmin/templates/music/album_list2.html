@@ -1,0 +1,11 @@
+{% extends 'music/BASE2.html' %}
+{% block content %}
+{% for album in album_list  %}
+    <li>{{ album.name }} - {{ album.genre }}</li>
+
+	</br>
+	</br>
+{% empty %}
+    <li>No albums yet.</li>
+{% endfor %}
+{% endblock %}

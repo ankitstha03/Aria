@@ -3,6 +3,8 @@ from django.views.generic import View, ListView, CreateView, DeleteView, UpdateV
 from .models import Album, Song, Playlist
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import View, DetailView
 from django.shortcuts import render_to_response
 from .forms import *
 from utils.views import *
@@ -16,6 +18,33 @@ from utils.views import *
 #        songall = Song.objects.all()
 #        return  render(request, 'music/song_list.html', {'song':song})
 #
+
+class HomeView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    def get(self, request):
+        return render(request, 'music/BASE2.html')
+
+class AlbumView(ListView):
+    template_name =  'music/album_list2.html'
+    pagninated = 40
+    model = Album
+    paginated = 25
+
+class AlbumDetails(DetailView):
+    model = Album
+
+
+
+class SongView(ListView):
+    template_name =  'music/song_list2.html'
+    pagninated = 40
+
+    def get_queryset(self):
+        qs = Song.objects.all()
+        print(qs)
+        return qs
+
+
 class PlaylistAddView(UsersMixin, View):
    template_name = 'music/playlist_form.html'
 

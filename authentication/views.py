@@ -6,7 +6,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, DetailView
 from authentication.models import UserProfiles
-from authentication.forms import Form_connection, Form_inscription
+from .forms import *
+
 #from music.models import Song, Album, playlist
 # This line imports the Django forms package
 # This line allows you to import the necessary functions of the authentication module.
@@ -22,47 +23,53 @@ class HomeView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('profile', args=[request.user.id]))
 
 def login_page(request):
-    if request.POST:
-        form = Form_connection(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(email=email, password=password)
-            # This line verifies that the username exists and the password is correct.
-            if user:
+    form = UserForm(request.POST or None)
+    context = {
+        "form": form,
+        'error_message': 'Invalid Login',
+    }
+    if request.method == "POST":
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(username=email, password=password)
+        if user is not None:
+            if user.is_active:
                 login(request, user)
-	# In this line, the login() function allows the user to connect.
-                if request.GET.get('next') is not None:
-                    return redirect(request.GET['next'])
+                return redirect('index1')
+            else:
+                return render(request, 'en/public/LOGIN.html', context)
         else:
-            return render(request, 'en/public/connection.html', {'form' : form})
-    else:
-        form = Form_connection()
-    return render(request, 'en/public/connection.html', {'form' : form})
+            return render(request, 'en/public/LOGIN.html',context)
+    return render(request, 'en/public/LOGIN.html',context)
 
 def signup_page(request):
-    if request.POST:
-        form = Form_inscription(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            login = form.cleaned_data['login']
-            password = form.cleaned_data['password']
-            email = form.cleaned_data['email']
-            new_user = User.objects.create_user(username=login, email=email, password=password)
-            new_user.is_active = True
-            new_user.last_name = name
-            new_user.save()
-            user = UserProfiles(user=new_user)
-            user.save()
-            return HttpResponse("User Created")
-        else:
-            return render(request, 'en/public/create_user.html', {'form' : form})
-    else:
-        form = Form_inscription()
-    form = Form_inscription()
-    return render(request, 'en/public/create_user.html', {'form' : form})
+    form = UserForm(request.POST or None)
+    if form.is_valid():
+        user = form.save(commit=False)
+        username = form.cleaned_data['username']
+        confirm_password=form.cleaned_data['confirm_password']
+        password = form.cleaned_data['password']
+        user.set_password(password)
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError("Passwords are not identical.")
+            return render(request, 'en/public/LOGIN.html', context)
+        user.save()
+        user2 = UserProfiles(user=user, bio="ankit is", location="nepal")
+        user2.save()
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('index1')
+    context = {
+        "form": form,
+    }
+    return render(request, 'en/public/LOGIN.html', context)
 
-def page(request):
+def logout_page(request):
     logout(request)
-    return HttpResponseRedirect(reverse('index1'))
-
+    form = UserForm(request.POST or None)
+    context = {
+        "form": form,
+    }
+    return redirect('index1')

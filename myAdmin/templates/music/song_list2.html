@@ -1,0 +1,49 @@
+{% extends 'music/BASE2.html' %}
+{% block content %}
+
+
+<div class="row" style="background-color:#DDD;">
+    <div class="c2">
+      <p>Title</p>
+    </div>
+    <div class="c2">
+      <p>Genre</p>
+    </div>
+    <div class="c2">
+      <p>Length</p>
+    </div>
+    <div class="c6">
+      <p>Audio</p>
+    </div>
+  </div>
+{% for song in song_list  %}
+
+    <div class="row" style="background-color:#F66;">
+    <div class="c2">
+      <p>{{ song.title }}</p>
+    </div>
+    <div class="c2">
+      <p>{{ song.genre }}</p>
+    </div>
+    <div class="c2">
+      <p>{{ song.playback_time }}</p>
+    </div>
+
+    <div class="c6">
+      		<audio>
+      <source src='/{{song.audio.url}}' onclick="play" >
+
+      Your browser does not support the audio element.
+    </audio>
+    </div>
+  </div>
+
+
+{% empty %}
+<div class="row" style="background color:blue;">
+  <div class="c12">
+    <p>No songs yet.</p>
+  </div>
+  </div>
+{% endfor %}
+{% endblock %}

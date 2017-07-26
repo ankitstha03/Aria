@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^music/', include('music.urls')),
     url(r'^$', views.index1, name='index1'),
-    url(r'^logout$', aV.page, name="logout"),
+    url(r'^logout$', aV.logout_page, name="logout"),
     url(r'^myadmin/', include('myAdmin.urls')),
     url(r'^login/', include('authentication.urls')),
 ]

@@ -1,30 +1,14 @@
 from django import forms
+from django.contrib.auth.models import User
 
-class Form_inscription(forms.Form):
-	# name     = forms.CharField(label="Name", max_length=30, error_messages=error_name)
-    name = forms.CharField(label="Name", max_length=30)
-    login = forms.CharField(label="Login")
-    password = forms.CharField(label="Password", widget=forms.PasswordInput)
-    email = forms.EmailField(label="Email")
-    # We add another field for the password. This field will be used to avoid typos from the user. If both passwords do not match, the validation will display an error message
-    password_bis = forms.CharField(label="Password", widget=forms.PasswordInput)
+class UserForm(forms.ModelForm):
+	first_name= forms.CharField(widget=forms.TextInput(attrs={'placeholder':'First Name'}))
+	last_name= forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Last Name'}))
+	username= forms.EmailField(widget=forms.TextInput(attrs={'placeholder':'E-mail'}))
+	password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
+	confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Confirm Password'}))
 
-    def clean(self):
-        cleaned_data = super(Form_inscription, self).clean()
-        password = self.cleaned_data.get('password')
-        password_bis = self.cleaned_data.get('password_bis')
-        if password and password_bis and password != password_bis:
-            raise forms.ValidationError("Passwords are not identical.")
-        return self.cleaned_data
-
-class Form_connection(forms.Form):
-    email = forms.CharField(label="Email")
-    password = forms.CharField(label="Password", widget=forms.PasswordInput)
-    def clean(self):
-        cleaned_data = super(Form_connection, self).clean()
-        email = self.cleaned_data.get('email')
-        password = self.cleaned_data.get('password')
-        if not authenticate(email=email, password=password):
-            raise forms.ValidationError("Wrong login or passwsord")
-        return self.cleaned_data
-
+	class Meta:
+		model = User
+		fields = ['first_name', 'last_name', 'username', 'password']
+#
