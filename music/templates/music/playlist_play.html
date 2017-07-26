@@ -1,8 +1,8 @@
 {% extends 'layouts/admin/base.html' %}
 {% block content %}
-	<a href= {% url "playlist_update" %}>Update Playlist</a>
-{% for song in song_list  %}
-    <li>{{ song.title }} - {{ song.album }}</li>
+	<a href= {% url "song_add" %}>Add Song</a>
+{% for song in playlist.songs.all  %}
+    <li>{{ song.title }} - {{ song.genre }}</li>
 		<audio controls>
 		  <source src={{song.audio.url}} >
 
