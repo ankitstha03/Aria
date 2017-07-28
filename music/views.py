@@ -111,7 +111,7 @@ def delete_song(request, album_id, song_id):
     album = get_object_or_404(Album, pk=album_id)
     song = Song.objects.get(pk=song_id)
     song.delete()
-    return render(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
+    return redirect(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
 
 
 def UserPlayList(request):
