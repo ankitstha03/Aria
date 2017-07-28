@@ -139,7 +139,7 @@ Search Results
 
 
 {% for artist in artists  %}
-<div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+<div class="col-md-4" style="background-color:#666; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
 <a href="{% url 'music:artist_detail' artist.id %}" >
 <div  style=" height: 200px; width:100%; margin-bottom:10px;  margin-10px;">
 <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO SEE SONGS </h4>
@@ -171,7 +171,7 @@ Search Results
 
 
 {% for playlist in playlists  %}
-<div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+<div class="col-md-4" style="background-color:#DD4; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
 <a >
 <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
 <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
@@ -203,7 +203,7 @@ Search Results
 <ul id="playlist" >
 
 {% for genre in genres  %}
-<div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+<div class="col-md-4" style="background-color:#F66; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
 <li><a href='/{{genre.audio.url}}' >
 <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ genre.album.cover.url }}'); margin-10px;">
 <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
@@ -231,7 +231,7 @@ Search Results
 	 		  <div class="wrap">
 
 				<div class="copy">
-				   <h1 style="font-size:13px;"><a style="color:#FFF;" href="blog.html" target="_blank">Recommended Songs</a></h1>
+				   <h1 style="font-size:13px;"><a style="color:#FFF;" target="_blank">Recommended Songs</a></h1>
 			    </div>
 			    <div class="clear"></div>
 			  </div>

@@ -113,6 +113,13 @@ def delete_song(request, album_id, song_id):
     song.delete()
     return redirect(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
 
+def delete_playlist(request, playlist_id):
+    addPlaylistForm = PlaylistForm()
+    playlist = Playlist.objects.get(pk=playlist_id)
+    playlist.delete()
+    playlists = Playlist.objects.filter(user=request.user)
+    return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
+
 
 def UserPlayList(request):
     if not request.user.is_authenticated():

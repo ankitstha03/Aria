@@ -1,44 +1,135 @@
 {% extends 'sitearia/base1.html' %}
-
+{% load staticfiles %}
 {% block title %}
 Your Playlists
 {% endblock %}
 
+
+        {% block head %}
+
+        <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+                <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+              <script type="text/javascript" src="{% static 'music/js/highCheckTree.js' %}"></script>
+              <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+              <link rel="stylesheet" type="text/css" href="{% static 'music/css/highCheckTree.css' %}"/>
+              <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+        <style>
+     #playlist{
+         list-style: none;
+         display:inline
+     }
+      ul#playlist li {
+ display:inline;
+}
+     #playlist li a{
+         color:black;
+         text-decoration: none;
+          display:inline
+     }
+     #playlist .current-song a{
+         color:blue;
+     }
+        </style>
+            <style type="text/css">
+            body { font-family:'Open Sans'; font-size:14px;}
+                #main-container{
+                    width: 250px;
+
+                }
+
+                #tree-container label.hover{
+                    color: red;
+                }
+            </style>
+        {% endblock %}
+
+
 {% block content %}
-<div class="container" style="margin-top:100px; back">
-{% for playlist in playlists  %}
-<img src= '/{{ playlist.pcover.url }}' style="width:20%; height:200px; size:cover;">
-    <li>{{ playlist.name }}</li>
-</br>
-
-	</br>
-	</br>
-{% empty %}
-    <li>No Playlist yet.</li>
-{% endfor %}
-<div class="container" style="position:relative;" >
-  <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-  						{% csrf_token %}
-  						{% include 'music/form-template.html' %}
-  						<div class="form-group"></div>
-  							<div class="col-sm-offset-2 col-sm-10">
-  							<button type="submit" class="btn btn-success">Submit</button>
-
-  							</div>
-  </form>
-</div>
-</div>
-{% endblock %}
+	<!-- Location -->
 
 
-  {% block footer %}
-  	<!-- Bottom footer -->
-  		<div class="footer-bottom" style="background-color:#FFF;">
-  	 		  <div class="wrap" style="height:40px;">
-  	     	  	<div class="copy">
-  				   <h1 style="font-size:13px; color:#000;"> <a href="#" target="_blank"></a>Aria&copy; 2017</h1>
-  			    </div>
-  			    <div class="clear"></div>
-  			  </div>
-         </div>
-  {% endblock %}
+
+		<!-- Blog Section -->
+        <div class="section" style="margin-top:140px;;">
+	    	<div class="container">
+				<div class="row">
+				<!-- Left Sidebar -->
+
+
+					<div class="col-sm-8" style="width:100%; margin-left:40px; margin-right:-40px;">
+
+
+
+		   	<h3 style=" font-size:30px;">Your Playlists</h3>
+		<!-- packages -->
+	<div class="main" style="margin-left:-70px; margin-right:-40px;">
+			 <div class="wrap">
+			   <div class="pages" >
+			   <!-- Row 1 -->
+
+
+
+      {% for playlist in playlists  %}
+      <div class="col-md-4" style="background-color:#DD4; height:370px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+      <a >
+      <div  style=" height: 280px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
+      <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
+    </div> {{ playlist.name }} - {{ playlist.user.first_name}}  </br>PLAYLIST</a><a href="{% url 'music:delete_playlist' playlist.id %}" style="border-radius:0px; position:absolute; bottom:5px; background-color:#F66; right:10px;" class="btn btn-primary btn-sm" role="button">Delete Playlist</a></li>
+      </div>
+     {% empty %}
+         <li>No playlist yet.</li>
+     {% endfor %}
+     <div class="col-md-4" style="background-color:#DD4; height:370px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+     <a >
+     <div  style=" height: 280px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
+       <h4 style="color:#FFF; text-align:center;"><form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+       						{% csrf_token %}
+       						{% include 'music/form-template2.html' %}
+       						<div class="form-group"></div>
+       							<div class="col-sm-offset-1 col-sm-10">
+       							<button type="submit" class="btn btn-success" style="border-radius:0px; background-color:#F66;">Create Playlist</button>
+
+       							</div>
+       </form></h4></h4>
+     </div></a>
+     </div>
+             </form></h4>
+           </div> </a>
+       </div>
+
+    </div>
+
+							</div>
+
+                               </div>
+				</div>
+
+
+              </div>
+                   </div>
+                        </div>
+
+              {% endblock %}
+
+    {% block footer %}
+    	<!-- Bottom footer -->
+    		<div class="footer-bottom" style="background-color:#FFF;">
+    	 		  <div class="wrap" style="height:40px;">
+    	     	  	<div class="copy">
+    				   <h1 style="font-size:13px; color:#000;"> <a href="#" target="_blank"></a>Aria&copy; 2017</h1>
+    			    </div>
+    			    <div class="clear"></div>
+    			  </div>
+           </div>
+    {% endblock %}
+
+
+    {% block script %}
+    <script src="{% static 'music/js/audioPlayer.js' %}"></script>
+    <script>
+    // loads the audio player
+    audioPlayer();
+    </script>
+
+    {% endblock %}
