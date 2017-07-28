@@ -32,7 +32,7 @@ class Album(CreationModificationDateMixin):
     genre = models.CharField(_("Genre"), max_length=50)
     year = models.IntegerField(_("Year"))
     cover = models.FileField(upload_to="cover",default = "cover/abc.jpg")
-    artist = models.ForeignKey(User)
+    artist =  models.ForeignKey(User, default=1)
 
     def __str__(self):
         return self.name
@@ -44,7 +44,7 @@ class Song(CreationModificationDateMixin):
     title = models.CharField(_("Title"), max_length=200)
     genre = models.CharField(_("Genre"), max_length=50)
     playback_time = models.CharField(_("PlayBackTime"), max_length=5)
-    artist = models.ForeignKey(User)
+    artist = models.ForeignKey(User, default=1)
     album = models.ForeignKey(Album,on_delete=models.CASCADE)
     audio = models.FileField(upload_to="songs",default = "songs/test.mp3")
     def __str__(self):

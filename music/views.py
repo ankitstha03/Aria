@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login
 from django.views.generic import View, ListView, CreateView, DeleteView, UpdateView
 from .models import Album, Song, Playlist
 from django.core.urlresolvers import reverse_lazy
@@ -6,7 +8,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, DetailView
 from django.shortcuts import render_to_response
+from django.contrib.auth.models import User
 from .forms import *
+from authentication.forms import *
+from myAdmin.forms import *
 from utils.views import *
 # Create your views here
 #class PlaylistView(UsersMixin,ListView):
@@ -18,6 +23,8 @@ from utils.views import *
 #        songall = Song.objects.all()
 #        return  render(request, 'music/song_list.html', {'song':song})
 #
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
+
 
 class HomeView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -36,15 +43,35 @@ class ArtistView(ListView):
     template_name =  'music/artist_list2.html'
     model = Artist
 
+
+
 class SongView(ListView):
     template_name =  'music/song_list2.html'
     pagninated = 40
 
-    def get_queryset(self):
-        qs = Song.objects.all()
-        print(qs)
-        return qs
+def ArtistAlbum(request):
+    if not request.user.is_authenticated():
+        return redirect('authen:register')
+    else:
+        albums = Album.objects.filter(artist=request.user)
+        addAlbumForm = AlbumForm()
+        form = AlbumForm(request.POST)
+        if form.is_valid():
+            albumObj = form.save(commit=False)
+            albumObj.artist = request.user
+            albumObj.cover = request.FILES['cover']
+            albumObj.save()
+            return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
+        return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
 
+
+def album_detail(request, album_id):
+    if not request.user.is_authenticated():
+        return redirect('authen:register')
+    else:
+        user = request.user
+        album = get_object_or_404(Album, pk=album_id)
+        return render(request, 'music/album_detail.html', {'album': album, 'user': user})
 
 class PlaylistAddView(UsersMixin, View):
    template_name = 'music/playlist_form.html'

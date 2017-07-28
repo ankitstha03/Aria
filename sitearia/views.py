@@ -9,7 +9,7 @@ def index1(request):
     song_results = Song.objects.all()
     artists=Artist.objects.all()
     playlists=Playlist.objects.all()
-
+    genres=Song.objects.all()
     if query:
         albums = albums.filter(
             Q(name__icontains=query)
@@ -23,11 +23,16 @@ def index1(request):
         playlists = playlists.filter(
             Q(name__icontains=query)
         ).distinct()
+        genres = genres.filter(
+            Q(genre__icontains=query)
+        )
         return render(request, 'music/search.html', {
             'albums': albums,
             'songs': song_results,
             'artists':artists,
             'playlists':playlists,
+            'genres':genres,
+            'query':query,
         })
     else:
         return render(request, 'sitearia/HOME.html')
