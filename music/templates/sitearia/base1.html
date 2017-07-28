@@ -1,0 +1,166 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html class="no-js">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Title for page -->
+<title>
+{% block title %}
+
+{% endblock %}
+-Aria</title>
+
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'music/css/bootstrap.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'music/css/font-awesome.min.css' %}" />
+              <!-- Custom CSS -->
+<link rel="stylesheet" href="{% static 'music/css/main.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css/custom.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css/contact.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css/style.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css/vertical.css' %}" />
+
+		   <!-- Custom Fonts & Icons -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,800' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{% static 'music/css1/style2.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css1/main.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css1/style.css' %}"  media="all" />
+<link rel="stylesheet" href="{% static 'music/css1/theme2.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css1/styled.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css1/custom-styles2.css' %}" />
+<link rel="stylesheet" href="{% static 'music/css/headersocial.css' %}" />
+
+<!-- Custom Fonts -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+
+<!-- Javascript -->
+ <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+ <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'music/js/jquery.roundabout-1.0.min.js' %}"></script>
+
+{% block head %}
+
+{% endblock %}
+ </head>
+
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" style="background-color:white;">
+
+
+
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+		<i class="fa fa-bars"></i>
+		</button>
+	<a class="navbar-brand" style="margin-top:-10px;" href="{% url 'index1' %}"><img src="{% static 'music/img/arialogo.png' %}"></a>
+	</div>
+
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-left navbar-main-collapse">
+	     <ul class="nav navbar-nav " >
+
+         <li>
+         <form class="navbar-form" id="form2" style="margin-top:-10px;  margin-bottom:-20px; " role="search" method="get" action="{% url 'index1' %}">
+          <div class="form-group">
+              <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" oninput="form2.submit()" placeholder="Search for songs, albums, artists, playlists..." style="height:30px; width:350px;">
+          </div>
+          <button type="submit"  style="height:33px; margin-top:10px;">Search</a></button>
+      </form>
+    </li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle"
+       data-toggle="dropdown"> Browse
+     <b class="caret"> </b>
+      <ul class="dropdown-menu">
+      <li><a href="{% url 'music:AlbumList' %}"> Albums</a> </li>
+        <li><a href="{% url 'music:ArtistList' %}"> Artists</a> </li>
+         <li><a href="{% url 'music:PlayList' %}"> Playlists</a> </li>
+         <li><a href="{% url 'music:SongList' %}"> Songs</a> </li>
+      </ul>
+    </li>
+			   </div>
+	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+	     <ul class="nav navbar-nav " >
+        {% if user.is_authenticated %}
+        <li class=""><a href="#">{{user.username}}</a> </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle"
+         data-toggle="dropdown"> Your Playlists
+       <b class="caret"> </b>
+        <ul class="dropdown-menu">
+        <li><a href="#"> Playlist name</a> </li>
+          <li><a href="#"> Latest</a> </li>
+          <li><a href="{% url 'music:SongList' %}"> Browse</a> </li>
+        </ul>
+      </li>
+       <li class=""><a href="#">Artist Section</a> </li>
+
+           <li class=""><a href="{% url 'logout' %}">Logout</a> </li>
+        {% else %}
+  			   <li class=""><a href="{% url 'authen:register' %}">Login/Register</a> </li>
+        {% endif %}
+  			   <li class=""><a href="#">About</a> </li>
+           <li class=""><a href="#">Contact Us</a> </li>
+		   </ul>
+	</div>
+	<!-- /.navbar-collapse -->
+</div>
+<!-- /.container -->
+</nav>
+
+
+<div class="row">
+<div class="share-it">
+<div class="facebook" style="background-image:url('{% static 'music/img/fb1.png' %}'); margin-bottom:5px; border-radius:15px;">
+ <a href="#"><i class="fa fa-facebook" ></i></a>
+</div>
+<div class="twitter" style="background-image:url('{% static 'music/img/tw1.png' %}'); margin-bottom:5px; border-radius:15px;">
+ <a href="#"><i class="fa fa-twitter"></i></a>
+</div>
+<div class="google hidden-xs" style="background-image:url('{% static 'music/img/pin1.png' %}'); margin-bottom:5px; border-radius:15px;">
+ <a href="#"><i class="fa fa-google-plus"></i></a>
+</div>
+<div class="rss" style="background-image:url('{% static 'music/img/rss1.png' %}'); margin-bottom:5px; border-radius:15px;" >
+ <a href="#"><i class="fa fa-rss"></i></a>
+</div>
+<div class="linkedin" style="background-image:url('{% static 'music/img/li1.png' %}'); margin-bottom:5px; border-radius:15px;">
+ <a href="#"><i class="fa fa-linkedin"></i></a>
+</div>
+<div class="youtube cboxElement" style="background-image:url('{% static 'music/img/vm1.png' %}'); margin-bottom:5px; border-radius:15px;">
+ <a href="#"><i class="fa fa-youtube"></i></a>
+</div>
+</div>
+</div>
+
+{% block content %}
+{% endblock %}
+
+
+{% block footer %}
+
+{% endblock %}
+
+
+
+
+
+				<script src="{% static 'music/js/jquery.min.js' %}"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="{% static 'music/js/bootstrap.min.js' %}"></script>
+
+ 	<!-- Scrolling Nav JavaScript -->
+		<script src="{% static 'music/js/jquery.easing.min.js' %}"></script>
+		<script src="{% static 'music/js/scrolling-nav.js' %}"></script>
+
+
+    </body>
+</html>

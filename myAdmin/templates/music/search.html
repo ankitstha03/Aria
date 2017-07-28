@@ -1,0 +1,62 @@
+{% extends 'sitearia/base1.html' %}
+{% block title %}
+Search Results
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top:100px;">
+{% for song in songs  %}
+    <li>{{ song.title }} - {{ song.album }}</li>
+		<audio controls>
+		  <source src='/{{song.audio.url}}' >
+
+			Your browser does not support the audio element.
+		</audio>
+
+	</br>
+	</br>
+
+{% empty %}
+    <li>no song found.</li>
+{% endfor %}
+{% for album in albums  %}
+    <li>{{ album.name }} - {{ album.year }}</li>
+
+	</br>
+	</br>
+
+{% empty %}
+    <li>no album found.</li>
+{% endfor %}
+{% for artist in artists  %}
+    <li>{{ artist.name }} - {{ artist.genre }}</li>
+
+	</br>
+	</br>
+
+{% empty %}
+    <li>no artist found.</li>
+{% endfor %}
+{% for playlist in playlists  %}
+    <li>{{ playlist.name }} </li>
+
+	</br>
+	</br>
+
+{% empty %}
+    <li>no playlist found.</li>
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block footer %}
+	<!-- Bottom footer -->
+		<div class="footer-bottom" style="background-color:#FFF;">
+	 		  <div class="wrap" style="height:40px;">
+	     	  	<div class="copy">
+				   <h1 style="font-size:13px; color:#000;"> <a href="#" target="_blank"></a>Aria&copy; 2017</h1>
+			    </div>
+			    <div class="clear"></div>
+			  </div>
+       </div>
+{% endblock %}

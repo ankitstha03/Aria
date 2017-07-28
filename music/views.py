@@ -22,18 +22,19 @@ from utils.views import *
 class HomeView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request):
-        return render(request, 'music/BASE2.html')
+        return render(request, 'sitearia/base1.html')
 
 class AlbumView(ListView):
     template_name =  'music/album_list2.html'
-    pagninated = 40
     model = Album
-    paginated = 25
+
 
 class AlbumDetails(DetailView):
     model = Album
 
-
+class ArtistView(ListView):
+    template_name =  'music/artist_list2.html'
+    model = Artist
 
 class SongView(ListView):
     template_name =  'music/song_list2.html'
@@ -65,24 +66,25 @@ class PlaylistAddView(UsersMixin, View):
 
 
 class PlaylistView(ListView):
+    template_name =  'music/playlist_list2.html'
     model = Playlist
-    fields = '__all__'
+
 
 class PlaylistCreate(CreateView):
     model = Playlist
     fields = '__all__'
 
-    success_url = reverse_lazy('PlaylistList')
+    success_url = reverse_lazy('music:Playlist')
 
 class PlaylistDelete(DeleteView):
     model = Playlist
     fields = '__all__'
-    success_url = reverse_lazy('PlaylistList')
+    success_url = reverse_lazy('music:Playlist')
 
 class PlaylistUpdate(UpdateView):
     model = Playlist
     fields = '__all__'
-    success_url = reverse_lazy('PlaylistList')
+    success_url = reverse_lazy('music:Playlist')
 
 def PlaylistPlay(request,playlist_id):
     playlist = get_object_or_404(Playlist,pk=playlist_id)

@@ -12,7 +12,7 @@ import eyed3
 # Create your views here.
 
 User = get_user_model()
-class HomeView(LoginRequiredMixin, View):
+class HomeView(ArtistsMixin, View):
     def get(self, request):
         return render(request, 'layouts/admin/base.html')
 
@@ -35,6 +35,7 @@ class AlbumAddView(ArtistsMixin, View):
         if form.is_valid():
             albumObj = form.save(commit=False)
             albumObj.artist = self.request.user
+            albumObj.cover = request.FILES['cover']
             albumObj.save()
             return redirect('myAdmin:AlbumList')
 
@@ -81,8 +82,14 @@ class SongAddView(ArtistsMixin, View):
         if form.is_valid():
             songObj =form.save(commit=False)
             songObj.artist = self.request.user
+            songObj.audio = request.FILES['audio']
             songObj.save()
-            return redirect('myAdmin:SongMeta')
+            temp=eyed3.load(songObj.audio.url)
+            songObj.playback_time=temp.info.time_secs
+            songObj.title=temp.tag.title
+            songObj.genre=str(temp.tag.genre)
+            songObj.save()
+            return redirect('myAdmin:SongList')
 
         else:
             return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
@@ -96,10 +103,7 @@ class SongView(ArtistsMixin, ListView):
         print(qs)
         return qs
 
-class SongCreate(ArtistsMixin, CreateView):
-    model = Song
-    fields = ['artist', 'album', 'audio']
-    success_url = reverse_lazy('myAdmin:SongMeta')
+
 
 class SongDelete(ArtistsMixin, DeleteView):
     model = Song
@@ -109,14 +113,3 @@ class SongUpdate(UpdateView):
     model = Song
     fields = '__all__'
     success_url = reverse_lazy('myAdmin:SongList')
-
-def songmeta(self):
-    model = Album
-    for song in Song.objects.all():
-        temp=eyed3.load(song.audio.url)
-        song.playback_time=temp.info.time_secs
-        song.title=temp.tag.title
-        song.genre=str(temp.tag.genre)
-        song.save()
-
-    return redirect('myAdmin:SongList')

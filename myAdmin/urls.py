@@ -10,9 +10,8 @@ if settings.DEBUG:
         url(r'^album/$', views.AlbumView.as_view(), name='AlbumList'),
         url(r'^song/$', views.SongView.as_view(), name='SongList'),
         url(r'^artist/$', views.ArtistView.as_view(), name='ArtistList'),
-        url(r'^temp/$', views.songmeta, name='SongMeta'),
         url(r'album/add/$', views.AlbumAddView.as_view(), name='album_add'),
-        url(r'song/add/$', views.SongCreate.as_view(), name='song_add'),
+        url(r'song/add/$', views.SongAddView.as_view(), name='song_add'),
         url(r'artist/add/$', views.ArtistCreate.as_view(), name='artist_add'),
 
         url(r'album/(?P<pk>[0-9]+)/$', views.AlbumUpdate.as_view(), name='album_update'),

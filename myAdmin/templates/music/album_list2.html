@@ -1,6 +1,13 @@
-{% extends 'music/BASE2.html' %}
+{% extends 'sitearia/base1.html' %}
+
+{% block title %}
+Browse Albums
+{% endblock %}
+
 {% block content %}
+<div class="container" style="margin-top:100px;">
 {% for album in album_list  %}
+<img src= '/{{ album.cover.url }}'>
     <li>{{ album.name }} - {{ album.genre }}</li>
 
 	</br>
@@ -8,4 +15,18 @@
 {% empty %}
     <li>No albums yet.</li>
 {% endfor %}
+</div>
 {% endblock %}
+
+
+  {% block footer %}
+  	<!-- Bottom footer -->
+  		<div class="footer-bottom" style="background-color:#FFF;">
+  	 		  <div class="wrap" style="height:40px;">
+  	     	  	<div class="copy">
+  				   <h1 style="font-size:13px; color:#000;"> <a href="#" target="_blank"></a>Aria&copy; 2017</h1>
+  			    </div>
+  			    <div class="clear"></div>
+  			  </div>
+         </div>
+  {% endblock %}

@@ -2,6 +2,7 @@
 {% block content %}
 	<a href= {% url "myAdmin:album_add" %}>Add Album</a>
 {% for album in album_list  %}
+<img src= '/{{ album.cover.url }}'>
     <li>{{ album.name }} - {{ album.genre }}</li>
 
 	<a href= {% url 'myAdmin:album_update' album.pk %}>Update Album</a>

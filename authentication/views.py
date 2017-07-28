@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, DetailView
 from authentication.models import UserProfiles
 from .forms import *
+from music.models import *
 
 #from music.models import Song, Album, playlist
 # This line imports the Django forms package
@@ -56,6 +57,8 @@ def signup_page(request):
         user.save()
         user2 = UserProfiles(user=user, bio="ankit is", location="nepal")
         user2.save()
+        arti=Artist(name=user.first_name, Location="nepal")
+        arti.save()
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
