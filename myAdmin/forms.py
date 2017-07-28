@@ -27,6 +27,12 @@ class SongForm(forms.ModelForm):
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
+class SongForm2(forms.ModelForm):
+    class Meta:
+        model = Song
+        fields = ['title','audio']
+
+
 class PlaylistForm(forms.ModelForm):
    class Meta:
        model = Playlist

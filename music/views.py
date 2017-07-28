@@ -13,6 +13,7 @@ from .forms import *
 from authentication.forms import *
 from myAdmin.forms import *
 from utils.views import *
+import eyed3
 # Create your views here
 #class PlaylistView(UsersMixin,ListView):
 #    model = Playlist
@@ -47,6 +48,7 @@ class ArtistView(ListView):
 
 class SongView(ListView):
     template_name =  'music/song_list2.html'
+    model=Song
     pagninated = 40
 
 def ArtistAlbum(request):
@@ -71,7 +73,29 @@ def album_detail(request, album_id):
     else:
         user = request.user
         album = get_object_or_404(Album, pk=album_id)
-        return render(request, 'music/album_detail.html', {'album': album, 'user': user})
+        addSongForm = SongForm2()
+        form = SongForm2(request.POST)
+        if form.is_valid():
+            songObj = form.save(commit=False)
+            songObj.album=album
+            songObj.artist = request.user
+            songObj.audio = request.FILES['audio']
+            songObj.save()
+            temp=eyed3.load(songObj.audio.url)
+            songObj.playback_time=temp.info.time_secs
+            songObj.genre=str(temp.tag.genre)
+            songObj.save()
+            return render(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
+        return render(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
+
+def album_detail2(request, album_id):
+        album = get_object_or_404(Album, pk=album_id)
+        return render(request, 'music/album_detail2.html', {'album': album})
+
+def artist_detail(request, artist_id):
+        artist = get_object_or_404(Artist, pk=artist_id)
+        user1=get_object_or_404(User, first_name=artist.name)
+        return render(request, 'music/artist_detail.html', {'artist': artist, 'user1':user1 })
 
 class PlaylistAddView(UsersMixin, View):
    template_name = 'music/playlist_form.html'
