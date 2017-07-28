@@ -1,5 +1,48 @@
 {% extends 'sitearia/base1.html' %}
-{% block title %}{{ album }}{% endblock %}
+{% load staticfiles %}
+{% block title %}
+{{album}}
+{% endblock %}
+
+
+        {% block head %}
+
+        <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+                <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+              <script type="text/javascript" src="{% static 'music/js/highCheckTree.js' %}"></script>
+              <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+              <link rel="stylesheet" type="text/css" href="{% static 'music/css/highCheckTree.css' %}"/>
+              <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+        <style>
+     #playlist{
+         list-style: none;
+         display:inline
+     }
+      ul#playlist li {
+ display:inline;
+}
+     #playlist li a{
+         color:black;
+         text-decoration: none;
+          display:inline
+     }
+     #playlist .current-song a{
+         color:blue;
+     }
+        </style>
+            <style type="text/css">
+            body { font-family:'Open Sans'; font-size:14px;}
+                #main-container{
+                    width: 250px;
+
+                }
+
+                #tree-container label.hover{
+                    color: red;
+                }
+            </style>
+        {% endblock %}
 
 
 {% block content %}
@@ -25,76 +68,106 @@
         </div>
 
         <!-- Right Song Info -->
-        <div class="col-sm-8 col-md-9">
 
-            <ul class="nav nav-pills" style="margin-bottom: 10px;">
-              <!--  <li role="presentation" class="active"><a href="{% url 'music:album_detail' album.id %}">View All</a></li>
-                <li role="presentation"><a href="#">Add New Song</a></li> -->
-            </ul>
+        					<div class="col-sm-8" style="width:75%; margin-left:40px; margin-right:-40px;">
 
-            <div class="panel panel-default">
-                <div class="panel-body">
 
-                    <h3>All Songs</h3>
+
+
+        		<!-- packages -->
+        	<div class="main" style="margin-left:-70px;">
+        			 <div class="wrap">
+        			   <div class="pages" >
+        			   <!-- Row 1 -->
+                  <div  style="text-align:center; margin-top:0px;"  >
+                    <audio style="width:80%;" src="" controls id="audioPlayer">
+                  Sorry, your browser doesn't support html5!
+              </audio>
+              </div>
+
+                   	<h3 style=" font-size:30px; margin-top:20px;">Songs in Album</h3>
 
                     {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
                     {% endif %}
 
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Audio File</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for song in album.song_set.all %}
-                            <tr>
-                                <td>{{ song.title }}</td>
-                                <td>
-                                    <!-- <a target="_blank" href="/{{ song.audio.url }}">
-                                        <button type="button" class="btn btn-success btn-xs">
-                                            <span class="glyphicon glyphicon-play"></span>&nbsp; Play
-                                        </button> -->
-                                        <audio controls>
-                                          <source src='/{{ song.audio.url }}'>
-                                          </audio>
-                                    </a>
-                                </td>
 
-                                <td>
-                                 <form action="#" method="post" style="display: inline;">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="song_id" value="{{ song.id }}" />
-                                        <button type="submit" class="btn btn-danger btn-xs">
-                                            <span class="glyphicon glyphicon-remove"></span>&nbsp; Delete
-                                        </button> 
-                                    </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+
+                        <ul id="playlist" >
+                          {% for song in album.song_set.all  %}
+                       <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+                            <li><a href='/{{song.audio.url}}' >
+                            <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
+                              <h4 style="color:#FFF; text-align:center;"></br></br>Click to Play </br> </br> </br> </br>
+                                </h4>
+                            </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}}  </a> <form action="{% url 'music:delete_song' album.id song.id %}" method="post" style="display: inline;">
+                                   {% csrf_token %}
+                                   <input type="hidden" name="song_id" value="{{ song.id }}" />
+                                   <button type="submit" class="btn btn-danger btn-xs" style="border-radius:0px; position:absolute; bottom:3px; background-color:#EEE; right:10px; ">
+                                       Delete
+                                   </button>
+                               </form></li>
+                         </div>
+                         {% empty %}
+                           <p>No songs yet.</p>
+                         {% endfor %}
+</ul>
+                         <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+                         <a>
+                         <div  style=" height: 200px; width:100%; margin-bottom:10px; margin-10px;">
+                           <h4 style="color:#FFF; text-align:center;"> Add New Song
+                             <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                             						{% csrf_token %}
+                             						{% include 'music/form-template.html' %}
+                             						<div class="form-group"></div>
+                             							<div class="col-sm-offset-1 col-sm-10">
+                             							<button type="submit" class="btn btn-success" style="border-radius:0px; background-color:#EEE; ">Submit</button>
+
+                             							</div>
+                             </form> </h4>
+                         </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}} </a>
+                                    </div>
+
+                        </div>
+
+                                  </div>
+
+                                                   </div>
+                            </div>
+
+
+
 
                 </div>
             </div>
 
-        </div>
 
-    </div>
 
-</div>
 
-<form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-						{% csrf_token %}
-						{% include 'music/form-template.html' %}
-						<div class="form-group"></div>
-							<div class="col-sm-offset-2 col-sm-10">
-							<button type="submit" class="btn btn-success">Submit</button>
 
-							</div>
-</form>
+
+
 
 {% endblock %}
+
+{% block footer %}
+  <!-- Bottom footer -->
+    <div class="footer-bottom" style="background-color:#FFF;">
+        <div class="wrap" style="height:40px;">
+            <div class="copy">
+           <h1 style="font-size:13px; color:#000;"> <a href="#" target="_blank"></a>Aria&copy; 2017</h1>
+          </div>
+          <div class="clear"></div>
+        </div>
+       </div>
+{% endblock %}
+
+
+    {% block script %}
+    <script src="{% static 'music/js/audioPlayer.js' %}"></script>
+    <script>
+    // loads the audio player
+    audioPlayer();
+    </script>
+
+    {% endblock %}

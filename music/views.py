@@ -97,6 +97,39 @@ def artist_detail(request, artist_id):
         user1=get_object_or_404(User, first_name=artist.name)
         return render(request, 'music/artist_detail.html', {'artist': artist, 'user1':user1 })
 
+def delete_album(request, album_id):
+    addAlbumForm = AlbumForm()
+    album = Album.objects.get(pk=album_id)
+    album.delete()
+    albums = Album.objects.filter(artist=request.user)
+    return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
+
+
+def delete_song(request, album_id, song_id):
+    user = request.user
+    addSongForm = SongForm2()
+    album = get_object_or_404(Album, pk=album_id)
+    song = Song.objects.get(pk=song_id)
+    song.delete()
+    return render(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
+
+
+def UserPlayList(request):
+    if not request.user.is_authenticated():
+        return redirect('authen:register')
+    else:
+        playlists = Playlist.objects.filter(user=request.user)
+        addPlaylistForm = PlaylistForm()
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            playlistObj = form.save(commit=False)
+            playlistObj.user = request.user
+            playlistObj.pcover = request.FILES['pcover']
+            playlistObj.save()
+            return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
+        return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
+
+
 class PlaylistAddView(UsersMixin, View):
    template_name = 'music/playlist_form.html'
 
@@ -110,7 +143,7 @@ class PlaylistAddView(UsersMixin, View):
            playlistObj = form.save(commit=False)
            playlistObj.user = self.request.user
            playlistObj.save()
-           return HttpResponseRedirect(reverse_lazy('PlaylistList'))
+           return HttpResponseRedirect(reverse_lazy('music:PlayList'))
 
        else:
            return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})

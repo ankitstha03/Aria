@@ -58,6 +58,7 @@ class Playlist(CreationModificationDateMixin):
     name = models.CharField(_("Playlist Name"), max_length=50)
     songs = models.ManyToManyField(Song, blank=True)
     user = models.ForeignKey(User)
+    pcover = models.FileField(upload_to="pcover",default = "pcover/abc.jpg")
 
     def __str__(self):
         return self.name

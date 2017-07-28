@@ -11,6 +11,7 @@ Artist Section
     <li>{{ album.name }} - {{ album.genre }}</li>
 </br>
 <a href="{% url 'music:album_detail' album.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+<a href="{% url 'music:delete_album' album.id %}" class="btn btn-primary btn-sm" role="button">Delete Album</a>
 	</br>
 	</br>
 {% empty %}
