@@ -134,7 +134,7 @@
                          <a>
                          <div  style=" height: 200px; width:100%; margin-bottom:10px; margin-10px;">
                            <h4 style="color:#FFF; text-align:center;"> Add New Song
-                             <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                             <form class="form-horizontal" action="{% url 'music:album_detail' album.id %}" method="post" enctype="multipart/form-data">
                              						{% csrf_token %}
                              						{% include 'music/form-template.html' %}
                              						<div class="form-group"></div>
