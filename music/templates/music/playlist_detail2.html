@@ -1,7 +1,7 @@
 {% extends 'sitearia/base1.html' %}
 {% load staticfiles %}
 {% block title %}
-{{album}}
+{{playlist}}
 {% endblock %}
 
 
@@ -54,15 +54,15 @@
         <div class="col-sm-4 col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a href="{% url 'music:album_detail2' album.id %}">
-                        {% if album.cover %}
-                            <img src="/{{ album.cover.url }}" class="img-responsive">
+                    <a href="{% url 'music:playlist_detail2' playlist.id %}">
+                        {% if playlist.pcover %}
+                            <img src="/{{ playlist.pcover.url }}" class="img-responsive">
                         {% else %}
                             <h3>No image to display</h3>
                         {% endif %}
                     </a>
-                    <h1>{{ album.name }} <small>{{ album.genre }}</small></h1>
-                    <h2>{{ album.artist }}</h2>
+                    <h1>{{ playlist.name }} <small>{{ playlist.user.first_name }}</small></h1>
+                    <h2> PLAYLIST </h2>
                 </div>
             </div>
             <div class="footer-bottom" style="background-color:#4ecdc4; margin-right:-10px; margin-bottom:20px; margin-top:80px;">
@@ -78,7 +78,7 @@
 
                          <div class="col-md-4">
               <ul id="playlist" >
-                {% for song in album.song_set.all  %}
+                {% for song in playlist.songs.song_set.all  %}
                 <div class="col-md-12" style="background-color:#6F6; height:280px; width:400%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                      <li><a href='/{{song.audio.url}}' >
                      <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
@@ -105,7 +105,7 @@
               </audio>
               </div>
 
-                   	<h3 style=" font-size:30px; margin-top:20px;">Songs in {{ album }}</h3>
+                   	<h3 style=" font-size:30px; margin-top:20px;">Songs in {{ playlist }}</h3>
 
                     {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
@@ -114,7 +114,7 @@
 
 
                         <ul id="playlist" >
-                          {% for song in album.song_set.all  %}
+                          {% for song in playlist.songs.song_set.all  %}
                        <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                             <li><a href='/{{song.audio.url}}' >
                             <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">

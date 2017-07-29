@@ -1,7 +1,7 @@
 {% extends 'sitearia/base1.html' %}
 {% load staticfiles %}
 {% block title %}
-{{album}}
+{{playlist}}
 {% endblock %}
 
 
@@ -54,15 +54,15 @@
         <div class="col-sm-4 col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a href="{% url 'music:album_detail2' album.id %}">
-                        {% if album.cover %}
-                            <img src="/{{ album.cover.url }}" class="img-responsive">
+                    <a href="{% url 'music:playlist_detail' playlist.id %}">
+                        {% if playlist.pcover %}
+                            <img src="/{{ playlist.pcover.url }}" class="img-responsive">
                         {% else %}
                             <h3>No image to display</h3>
                         {% endif %}
                     </a>
-                    <h1>{{ album.name }} <small>{{ album.genre }}</small></h1>
-                    <h2>{{ album.artist }}</h2>
+                    <h1>{{ playlist.name }} <small>{{ playlist.user.first_name }}</small></h1>
+                    <h2> PLAYLIST</h2>
                 </div>
             </div>
             <div class="footer-bottom" style="background-color:#4ecdc4; margin-right:-10px; margin-bottom:20px; margin-top:80px;">
@@ -78,7 +78,7 @@
 
                          <div class="col-md-4">
               <ul id="playlist" >
-                {% for song in album.song_set.all  %}
+                {% for song in songss  %}
                 <div class="col-md-12" style="background-color:#6F6; height:280px; width:400%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                      <li><a href='/{{song.audio.url}}' >
                      <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
@@ -93,19 +93,20 @@
         <!-- Right Song Info -->
 
         					<div class="col-sm-8" style="width:75%; margin-left:40px; margin-right:-40px;">
-
+                    <div  style="text-align:center; margin-top:0px;"  >
+                      <audio style="width:80%;" src="" controls id="audioPlayer">
+                    Sorry, your browser doesn't support html5!
+                </audio>
+                </div>
         		<!-- packages -->
+                <div class=row style="margin-bottom:50px; margin-top:-50px;">
         	<div class="main" style="margin-left:-70px;">
         			 <div class="wrap">
         			   <div class="pages" >
         			   <!-- Row 1 -->
-                  <div  style="text-align:center; margin-top:0px;"  >
-                    <audio style="width:80%;" src="" controls id="audioPlayer">
-                  Sorry, your browser doesn't support html5!
-              </audio>
-              </div>
 
-                   	<h3 style=" font-size:30px; margin-top:20px;">Songs in {{ album }}</h3>
+
+                   	<h3 style=" font-size:30px; margin-top:20px;">Songs in {{ playlist }}</h3>
 
                     {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
@@ -114,13 +115,19 @@
 
 
                         <ul id="playlist" >
-                          {% for song in album.song_set.all  %}
-                       <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+                          {% for song in playlist.songs.all  %}
+                       <div class="col-md-4" style="background-color:#FF6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                             <li><a href='/{{song.audio.url}}' >
                             <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
                               <h4 style="color:#FFF; text-align:center;"></br></br>Click to Play </br> </br> </br> </br>
                                 </h4>
-                            </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}}  </a> </li>
+                            </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}}  </a><form action="{% url 'music:remove_playlist' playlist.id song.id %}" method="post" style="display: inline;">
+                                   {% csrf_token %}
+                                   <input type="hidden" name="song_id" value="{{ song.id }}" />
+                                   <button type="submit" class="btn btn-danger btn-xs" style="border-radius:0px; position:absolute; bottom:3px; background-color:#EEE; right:10px; ">
+                                       Remove
+                                   </button>
+                               </form></li>
                          </div>
                          {% endfor %}
 </ul>
@@ -130,6 +137,32 @@
                                   </div>
 
                                                    </div>
+                                                      </div>
+
+                      <div class=row style="margin-bottom:50px; margin-top:-50px;">
+                <div class="main" style="margin-left:-70px;">
+                     <div class="wrap">
+                       <div class="pages" >
+                       <!-- Row 1 -->
+
+
+                          <h3 style=" font-size:30px; margin-top:20px;">Add Songs to {{ playlist }}</h3>
+
+
+
+                                {% for song in songss  %}
+                             <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+                                <a href="{% url 'music:add_playlist' playlist.id song.id %}" >
+                                  <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
+                                    <h4 style="color:#FFF; text-align:center;"></br></br>Click to Add </br> </br> </br> </br>
+                                      </h4>
+                                  </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}}  </a>
+                               </div>
+                               {% endfor %}
+                                                                        </div>
+
+                                                                                         </div>
+                                                                                            </div>
                             </div>
 
 

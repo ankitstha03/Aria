@@ -72,9 +72,9 @@ Your Playlists
 
       {% for playlist in playlists  %}
       <div class="col-md-4" style="background-color:#DD4; height:370px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
-      <a >
+      <a href="{% url 'music:playlist_detail' playlist.id %}">
       <div  style=" height: 280px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
-      <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
+      <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO SEE SONS </h4>
     </div> {{ playlist.name }} - {{ playlist.user.first_name}}  </br>PLAYLIST</a><a href="{% url 'music:delete_playlist' playlist.id %}" style="border-radius:0px; position:absolute; bottom:5px; background-color:#F66; right:10px;" class="btn btn-primary btn-sm" role="button">Delete Playlist</a></li>
       </div>
      {% empty %}

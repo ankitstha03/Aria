@@ -111,7 +111,7 @@ def delete_song(request, album_id, song_id):
     album = get_object_or_404(Album, pk=album_id)
     song = Song.objects.get(pk=song_id)
     song.delete()
-    return redirect(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
+    return render(request, 'music/album_detail.html', {'album': album, 'user': user, 'form':addSongForm})
 
 def delete_playlist(request, playlist_id):
     addPlaylistForm = PlaylistForm()
@@ -119,6 +119,28 @@ def delete_playlist(request, playlist_id):
     playlist.delete()
     playlists = Playlist.objects.filter(user=request.user)
     return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
+
+def playlist_detail2(request, playlist_id):
+    playlist = get_object_or_404(Playlist, pk=playlist_id)
+    return render(request, 'music/playlist_detail2.html', {'playlist': playlist})
+
+def playlist_detail(request, playlist_id):
+    playlist = get_object_or_404(Playlist, pk=playlist_id)
+    songss= Song.objects.all()
+    return render(request, 'music/playlist_detail.html', {'playlist': playlist, 'songss':songss})
+
+
+def add_playlist(request, playlist_id, song_id):
+    playlist = Playlist.objects.get(pk=playlist_id)
+    playlist.songs.add(Song.objects.get(pk=song_id))
+    song= Song.objects.all()
+    return render(request, 'music/playlist_detail.html', {'playlist': playlist, 'songss':song})
+
+def remove_playlist(request, playlist_id, song_id):
+    playlist = Playlist.objects.get(pk=playlist_id)
+    playlist.songs.remove(song_id)
+    song= Song.objects.all()
+    return render(request, 'music/playlist_detail.html', {'playlist': playlist, 'songss':song})
 
 
 def UserPlayList(request):

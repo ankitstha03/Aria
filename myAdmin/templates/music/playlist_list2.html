@@ -72,7 +72,7 @@ Browse Playlists
 
 {% for playlist in playlist_list  %}
 <div class="col-md-4" style="background-color:#DD4; height:370px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
-<a >
+<a href="{% url 'music:playlist_detail2' playlist.id %}">
 <div  style=" height: 280px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
 <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
 </div> {{ playlist.name }} </br> {{ playlist.user.first_name}} </a>
