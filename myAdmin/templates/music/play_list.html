@@ -69,12 +69,12 @@ Your Playlists
 			   <!-- Row 1 -->
 
 
-
+<div class="row">
       {% for playlist in playlists  %}
       <div class="col-md-4" style="background-color:#DD4; height:370px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
       <a href="{% url 'music:playlist_detail' playlist.id %}">
       <div  style=" height: 280px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
-      <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO SEE SONS </h4>
+      <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO SEE SONGS </h4>
     </div> {{ playlist.name }} - {{ playlist.user.first_name}}  </br>PLAYLIST</a><a href="{% url 'music:delete_playlist' playlist.id %}" style="border-radius:0px; position:absolute; bottom:5px; background-color:#F66; right:10px;" class="btn btn-primary btn-sm" role="button">Delete Playlist</a></li>
       </div>
      {% empty %}
@@ -83,9 +83,9 @@ Your Playlists
      <div class="col-md-4" style="background-color:#DD4; height:370px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
      <a >
      <div  style=" height: 280px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
-       <h4 style="color:#FFF; text-align:center;"><form class="form-horizontal" action="{% url 'music:UserPlayList' %}" method="post" enctype="multipart/form-data">
+       <h4 style="color:#FFF; text-align:center;"></br>Create Playlist<form class="form-horizontal" action="{% url 'music:UserPlayList' %}" method="post" enctype="multipart/form-data">
        						{% csrf_token %}
-       						{% include 'music/form-template2.html' %}
+       						{% include 'music/form-template.html' %}
        						<div class="form-group"></div>
        							<div class="col-sm-offset-1 col-sm-10">
        							<button type="submit" class="btn btn-success" style="border-radius:0px; background-color:#F66;">Create Playlist</button>
@@ -94,8 +94,26 @@ Your Playlists
        </form></h4></h4>
      </div></a>
      </div>
-             </form></h4>
-           </div> </a>
+
+           </div>
+
+           <div class="pagination" style="margin-left:45%;">
+               <span class="step-links">
+                {% if playlists.has_previous %}
+                    <a style="color:#66F;" href="/music/userplaylist/?page={{ playlists.previous_page_number }}"> << </a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ playlists.number }} of {{ playlists.paginator.num_pages }}.
+                </span>
+
+                {% if playlists.has_next %}
+                    <a style="color:#66F;" href="/music/userplaylist/?page={{ playlists.next_page_number }}"> >> </a>
+                {% endif %}
+               </span>
+           </div>
+
+         </div>
        </div>
 
     </div>

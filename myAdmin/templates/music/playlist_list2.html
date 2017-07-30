@@ -69,7 +69,7 @@ Browse Playlists
 			   <!-- Row 1 -->
 
 
-
+<div class="row">
 {% for playlist in playlist_list  %}
 <div class="col-md-4" style="background-color:#DD4; height:370px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
 <a href="{% url 'music:playlist_detail2' playlist.id %}">
@@ -80,6 +80,24 @@ Browse Playlists
      {% empty %}
          <li>No playlist yet.</li>
      {% endfor %}
+     <div>
+
+     {% if is_paginated %}
+       <div class="pagination" style="margin-left:45%;">
+           <span class="page-links">
+               {% if page_obj.has_previous %}
+                   <a style="color:#66F;" href="/music/playlist/?page={{ page_obj.previous_page_number }}"> << </a>
+               {% endif %}
+               <span class="page-current">
+                   Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+               </span>
+               {% if page_obj.has_next %}
+                   <a style="color:#66F;" href="/music/playlist/?page={{ page_obj.next_page_number }}"> >> </a>
+               {% endif %}
+           </span>
+       </div>
+   {% endif %}
+
 
     </div>
 

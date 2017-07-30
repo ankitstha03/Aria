@@ -9,7 +9,9 @@ from music.models import Song, Album, Artist
 from myAdmin.forms import *
 from utils.views import *
 import eyed3
-# Create your views here.
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
 
 User = get_user_model()
 class HomeView(ArtistsMixin, View):

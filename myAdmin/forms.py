@@ -36,7 +36,7 @@ class SongForm2(forms.ModelForm):
 class PlaylistForm(forms.ModelForm):
    class Meta:
        model = Playlist
-       exclude = ['user']
+       exclude = ['user','songs']
 
    # Adding Classes to each for CSS styling
    def __init__(self, *args, **kwargs):

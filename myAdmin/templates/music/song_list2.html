@@ -73,7 +73,7 @@ Browse Songs
 			   <!-- Row 1 -->
 
 
-
+<div class="row">
     <ul id="playlist" >
       {% for song in song_list  %}
 	 <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
@@ -82,11 +82,30 @@ Browse Songs
           <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
         </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}} </a></li>
 		 </div>
+
      {% empty %}
        <p>No songs yet.</p>
      {% endfor %}
 
-    </ul>
+       </ul>
+</div>
+     {% if is_paginated %}
+       <div class="pagination" style="margin-left:45%;">
+           <span class="page-links">
+               {% if page_obj.has_previous %}
+                   <a style="color:#66F;" href="/music/song/?page={{ page_obj.previous_page_number }}"> << </a>
+               {% endif %}
+               <span class="page-current">
+                   Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+               </span>
+               {% if page_obj.has_next %}
+                   <a style="color:#66F;" href="/music/song/?page={{ page_obj.next_page_number }}"> >> </a>
+               {% endif %}
+           </span>
+       </div>
+   {% endif %}
+
+
     </div>
 
 							</div>

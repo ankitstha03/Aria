@@ -78,7 +78,7 @@
 
                          <div class="col-md-4">
               <ul id="playlist" >
-                {% for song in songss  %}
+                {% for song in playlist.songs.all  %}
                 <div class="col-md-12" style="background-color:#6F6; height:280px; width:400%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                      <li><a href='/{{song.audio.url}}' >
                      <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
@@ -149,7 +149,7 @@
                           <h3 style=" font-size:30px; margin-top:20px;">Add Songs to {{ playlist }}</h3>
 
 
-
+                            <div class="row">
                                 {% for song in songss  %}
                              <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                                 <a href="{% url 'music:add_playlist' playlist.id song.id %}" >
@@ -160,6 +160,24 @@
                                </div>
                                {% endfor %}
                                                                         </div>
+
+                  <div class="pagination" style="margin-left:45%;">
+                      <span class="step-links">
+                       {% if songss.has_previous %}
+                           <a style="color:#66F;" href="/music/userplaylist/{{ playlist.id }}/?page={{ songss.previous_page_number }}"> << </a>
+                       {% endif %}
+
+                       <span class="current">
+                           Page {{ songss.number }} of {{ songss.paginator.num_pages }}.
+                       </span>
+
+                       {% if songss.has_next %}
+                           <a style="color:#66F;" href="/music/userplaylist/{{ playlist.id }}/?page={{ songss.next_page_number }}"> >> </a>
+                       {% endif %}
+                      </span>
+                  </div>
+                                                                        </div>
+
 
                                                                                          </div>
                                                                                             </div>

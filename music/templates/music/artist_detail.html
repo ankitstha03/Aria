@@ -110,9 +110,9 @@
                     {% endif %}
 
 
-
+                    <div class="row">
                         <ul id="playlist" >
-                          {% for song in user1.song_set.all  %}
+                          {% for song in songs  %}
                        <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                             <li><a href='/{{song.audio.url}}' >
                             <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
@@ -122,6 +122,22 @@
                          </div>
                          {% endfor %}
 </ul>
+</div>
+<div class="pagination" style="margin-left:45%;">
+    <span class="step-links">
+     {% if songs.has_previous %}
+         <a style="color:#66F;" href="/music/artist/{{ artist.id }}/?page={{ songs.previous_page_number }}"> << </a>
+     {% endif %}
+
+     <span class="current">
+         Page {{ songs.number }} of {{ songs.paginator.num_pages }}.
+     </span>
+
+     {% if songs.has_next %}
+         <a style="color:#66F;" href="/music/artist/{{ artist.id }}/?page={{ songs.next_page_number }}"> >> </a>
+     {% endif %}
+    </span>
+</div>
 
                         </div>
 
