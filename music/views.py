@@ -84,6 +84,15 @@ def ArtistAlbum(request):
             albumObj.artist = request.user
             albumObj.cover = request.FILES['cover']
             albumObj.save()
+            paginator = Paginator(album_list, 8)
+            try:
+                albums = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                albums = paginator.page(1)
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                paginator = paginator.page(paginator.num_pages)
             return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
         return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
 
@@ -118,6 +127,17 @@ def album_detail(request, album_id):
             songObj.playback_time=temp.info.time_secs
             songObj.genre=str(temp.tag.genre)
             songObj.save()
+            paginator = Paginator(song_list, 8) # Show 25 contacts per page
+
+            page = request.GET.get('page')
+            try:
+                songs = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                songs = paginator.page(1)
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                paginator = paginator.page(paginator.num_pages)
             return render(request, 'music/album_detail.html', {'album': album, 'songs':songs, 'user': user, 'form':addSongForm})
         return render(request, 'music/album_detail.html', {'album': album,  'songs':songs, 'user': user, 'form':addSongForm})
 
@@ -295,6 +315,16 @@ def UserPlayList(request):
             playlistObj.user = request.user
             playlistObj.pcover = request.FILES['pcover']
             playlistObj.save()
+            paginator = Paginator(playlists_list, 8) # Show 25 contacts per page
+
+            page = request.GET.get('page')
+            try:
+                playlists = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                playlists = paginator.page(1)
+            except EmptyPage:
+                paginator = paginator.page(paginator.num_pages)
             return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
         return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
 
