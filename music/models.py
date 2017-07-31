@@ -7,7 +7,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from utils.models import CreationModificationDateMixin
 from django.contrib import admin
-import uuid
 from authentication.models import UserProfiles
 from django.contrib.auth import get_user_model
 
@@ -62,3 +61,8 @@ class Playlist(CreationModificationDateMixin):
 
     def __str__(self):
         return self.name
+
+class PlayCount(CreationModificationDateMixin):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+    playcount = models.IntegerField(default=0)
