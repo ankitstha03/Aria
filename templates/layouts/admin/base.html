@@ -82,9 +82,10 @@
        {% endfor %}
        {% endif %}
        <!-- BEGIN CONTENT-->
-       <div id="content">
+       <div id="content" style="overflow-y: scroll; overflow-x:hidden;">
 
         {% block content %}
+
         {% endblock %}
     </div><!--end #content-->
     <!-- END CONTENT -->
@@ -98,7 +99,7 @@
                 </a>
             </div>
             <div class="expanded">
-                <a href="">
+                <a href={% url "myAdmin:SongList" %}>
                     <span class="text-lg text-bold text-primary ">Aria&nbsp;ADMIN</span>
                 </a>
             </div>
@@ -108,35 +109,64 @@
             <!-- BEGIN MAIN MENU -->
             <ul id="main-menu" class="gui-controls">
 
-                <!-- BEGIN DASHBOARD -->
-                <li>
-                        <div class="gui-icon"><i class="fa fa-dashboard"></i></div>
-                        <span class="title">Artist</span>
-                    </a>
-                </li><!--end /menu-li -->
-                <!-- END DASHBOARD -->
 <li>
-                                    <li>
-                    <a href="{% url "myAdmin:ArtistList" %}" id="slider">
-                        <div class="gui-icon"><i class="fa fa-photo"></i></div>
-                        <span class="title">Artists</span>
-                    </a>
-                </li><!--end /menu-li -->
-                <li>
+  <li class="gui-folder">
+    <a class= {% block song %} {% endblock %}>
+      <div class="gui-icon"><i class="fa fa-youtube-play"></i></div>
+      <span class="title">Songs</span>
+    </a>
+    <!--start submenu -->
+    <ul>
+      <li><a href= {% url "myAdmin:SongList" %} ><span class="title">Songs List</span></a></li>
+      <li><a href= {% url "myAdmin:song_add" %} ><span class="title">Add Song</span></a></li>
 
-                <li>
-                                    <li>
-                    <a href="{% url "myAdmin:AlbumList" %}" id="slider">
-                        <div class="gui-icon"><i class="fa fa-photo"></i></div>
-                        <span class="title">Albums</span>
-                    </a>
-                </li><!--end /menu-li -->
-                <li>
-                    <a href="{% url "myAdmin:SongList" %}" id="trailer">
-                        <div class="gui-icon"><i class="fa fa-youtube-play"></i></div>
-                        <span class="title">Songs</span>
-                    </a>
-                </li><!--end /menu-li -->
+    </ul><!--end /submenu -->
+  </li><!--end /menu-li -->
+
+  <li>
+    <li class="gui-folder">
+      <a class= {% block artist %} {% endblock %}>
+        <div class="gui-icon"><i class="fa fa-puzzle-piece fa-fw"></i></div>
+        <span class="title">Artists</span>
+      </a>
+      <!--start submenu -->
+      <ul>
+        <li><a href= {% url "myAdmin:ArtistList" %} ><span class="title">Artists List</span></a></li>
+        <li><a href= {% url "myAdmin:artist_add" %} ><span class="title">Add Artist</span></a></li>
+
+      </ul><!--end /submenu -->
+    </li><!--end /menu-li -->
+
+    <li>
+      <li class="gui-folder">
+        <a class= {% block album %} {% endblock %}>
+            <div class="gui-icon"><i class="fa fa-photo"></i></div>
+          <span class="title">Albums</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+          <li><a href= {% url "myAdmin:AlbumList" %} ><span class="title">Albums List</span></a></li>
+          <li><a href= {% url "myAdmin:album_add" %} ><span class="title">Add Album</span></a></li>
+
+        </ul><!--end /submenu -->
+      </li><!--end /menu-li -->
+
+      <li>
+        <li class="gui-folder">
+          <a class= {% block playlist %} {% endblock %}>
+              <div class="gui-icon"><i class="md md-assessment"></i></div>
+            <span class="title">Playlists</span>
+          </a>
+          <!--start submenu -->
+          <ul>
+            <li><a href= {% url "myAdmin:PlayList" %} ><span class="title">Playlists List</span></a></li>
+            <li><a href= {% url "myAdmin:playlist_add" %} ><span class="title">Add Playlist</span></a></li>
+
+          </ul><!--end /submenu -->
+        </li><!--end /menu-li -->
+  <!-- END EMAIL -->
+
+
             </ul><!--end .main-menu -->
             <!-- END MAIN MENU -->
 

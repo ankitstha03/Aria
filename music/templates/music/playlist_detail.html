@@ -65,29 +65,7 @@
                     <h2> PLAYLIST</h2>
                 </div>
             </div>
-            <div class="footer-bottom" style="background-color:#4ecdc4; margin-right:-10px; margin-bottom:20px; margin-top:80px;">
-                  <div class="wrap">
 
-                  <div class="copy">
-                     <h1 style="font-size:13px;"><a style="color:#FFF;" target="_blank">Recommended Songs</a></h1>
-                    </div>
-                    <div class="clear"></div>
-                  </div>
-                 </div>
-
-
-                         <div class="col-md-4">
-              <ul id="playlist" >
-                {% for song in playlist.songs.all  %}
-                <div class="col-md-12" style="background-color:#6F6; height:280px; width:400%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
-                     <li><a href='/{{song.audio.url}}' >
-                     <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
-                       <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
-                     </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}} </a></li>
-                  </div>
-               {% endfor %}
-              </ul>
-              </div>
         </div>
 
         <!-- Right Song Info -->
@@ -116,7 +94,7 @@
 
                         <ul id="playlist" >
                           {% for song in playlist.songs.all  %}
-                       <div class="col-md-4" style="background-color:#FF6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+                       <div class="col-md-4" style="background-color:#DDD; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                             <li><a href='/{{song.audio.url}}' >
                             <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
                               <h4 style="color:#FFF; text-align:center;"></br></br>Click to Play </br> </br> </br> </br>
@@ -151,7 +129,7 @@
 
                             <div class="row">
                                 {% for song in songss  %}
-                             <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+                             <div class="col-md-4" style="background-color:#DDD; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
                                 <a href="{% url 'music:add_playlist' playlist.id song.id %}" >
                                   <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
                                     <h4 style="color:#FFF; text-align:center;"></br></br>Click to Add </br> </br> </br> </br>

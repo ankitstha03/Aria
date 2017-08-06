@@ -47,6 +47,18 @@ Search Results
 
 {% block content %}
 	<!-- Location -->
+
+
+           {% for song in sngss %}
+                      <h4 style="text=align:center; margin-left:10%;"> Now Playing: {{ song.title }} </h4>
+           {% endfor %}
+           <ul id="playlist">
+         {% for song in sngss %}
+         <li><a href='/{{song.audio.url}}' ></li>
+
+         </div>
+           {% endfor %}
+         </ul>
         <div  style="text-align:center; margin-top:150px;"  >
           <audio style="width:80%;" src="" controls id="audioPlayer">
         Sorry, your browser doesn't support html5!
@@ -61,7 +73,7 @@ Search Results
 				<!-- Left Sidebar -->
 
 
-					<div class="col-sm-8" style="width:75%; margin-left:40px; margin-right:-40px;">
+					<div class="col-sm-12" style="width:90%; margin-left:40px; margin-right:-40px;">
 
 
             {% if songs %}
@@ -75,18 +87,17 @@ Search Results
 
 
 
-    <ul id="playlist" >
 
         {% for song in songs  %}
-	 <div class="col-md-4" style="background-color:#6F6; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
-        <li><a href='/{{song.audio.url}}' >
-        <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
+	 <div class="col-md-4" style="background-color:#DDD; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
+        <li><a href="{% url 'music:songer' song.id %}" >
+        <div  style=" height: 200px; width:100%; margin-top:-25px; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
           <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
         </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}} </a></li>
 		 </div>
      {% endfor %}
 
-    </ul>
+
     </div>
 
 							</div>
@@ -172,7 +183,7 @@ Search Results
 
 {% for playlist in playlists  %}
 <div class="col-md-4" style="background-color:#DD4; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
-<a >
+<a href="{% url 'music:playlist_detail2' playlist.id %}">
 <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ playlist.pcover.url }}'); margin-10px;">
 <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
 </div> {{ playlist.name }} </br> {{ playlist.user.first_name}} </a>
@@ -200,18 +211,18 @@ Search Results
 
 
 
-<ul id="playlist" >
+
 
 {% for genre in genres  %}
 <div class="col-md-4" style="background-color:#F66; height:280px; width:30%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
-<li><a href='/{{genre.audio.url}}' >
-<div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ genre.album.cover.url }}'); margin-10px;">
+<li><a href="{% url 'music:songer' genre.id %}" >
+<div  style=" height: 200px; width:100%; margin-top:-25px; margin-bottom:10px; background-image:url('/{{ genre.album.cover.url }}'); margin-10px;">
 <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
 </div> {{ genre.title }}-{{ genre.album.name }} </br> {{ genre.genre}} </a></li>
 </div>
 {% endfor %}
 
-</ul>
+
 </div>
 
   </div>
@@ -224,33 +235,7 @@ Search Results
 				</div>
 
 
-					<div class="col-sm-4 blog-sidebar" style="width:23%; margin-left:0px;">
-						<!-- Search Form -->
 
-	<div class="footer-bottom" style="background-color:#4ecdc4; margin-right:-10px; margin-bottom:20px; margin-top:20px;">
-	 		  <div class="wrap">
-
-				<div class="copy">
-				   <h1 style="font-size:13px;"><a style="color:#FFF;" target="_blank">Recommended Songs</a></h1>
-			    </div>
-			    <div class="clear"></div>
-			  </div>
-       </div>
-
-
-					     <div class="col-md-4">
-    <ul id="playlist" >
-      {% for song in songs  %}
-      <div class="col-md-12" style="background-color:#6F6; height:280px; width:400%; padding:10px 10px; margin-top:20px; border-radius:5px; margin-right:20px;">
-           <li><a href='/{{song.audio.url}}' >
-           <div  style=" height: 200px; width:100%; margin-bottom:10px; background-image:url('/{{ song.album.cover.url }}'); margin-10px;">
-             <h4 style="color:#FFF; text-align:center;"></br></br> </br> </br> CLICK TO PLAY </h4>
-           </div> {{ song.title }}-{{ song.album.name }} </br> {{ song.genre}} </a></li>
-        </div>
-     {% endfor %}
-    </ul>
-    </div>
-         </div>
               </div>
                    </div>
                         </div>

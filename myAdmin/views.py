@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View,ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from music.models import Song, Album, Artist
+from music.models import *
 from myAdmin.forms import *
 from utils.views import *
 import eyed3
@@ -52,6 +52,42 @@ class AlbumDelete(ArtistsMixin, DeleteView):
     model = Album
     success_url = reverse_lazy('myAdmin:AlbumList')
 
+class PlaylistView(ArtistsMixin, ListView):
+    template_name =  'music/play_list2.html'
+    model = Playlist
+    context_object_name = "playlist_list"
+    paginated = 25
+
+class PlaylistDetails(DetailView):
+    model = Playlist
+
+class PlaylistAddView(ArtistsMixin, View):
+    template_name = 'music/play_form.html'
+    def get(self, request, *args, **kwargs):
+        addAlbumForm = PlaylistForm()
+        return render(request, self.template_name, {'form': addAlbumForm})
+
+    def post(self, request, *args, **kwargs):
+        form = PlaylistForm(request.POST)
+        if form.is_valid():
+            albumObj = form.save(commit=False)
+            albumObj.user = self.request.user
+            albumObj.pcover = request.FILES['pcover']
+            albumObj.save()
+            return redirect('myAdmin:PlayList')
+
+        else:
+            return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
+
+class PlaylistUpdate(ArtistsMixin, UpdateView):
+    model = Playlist
+    fields = '__all__'
+    success_url = reverse_lazy('myAdmin:PlayList')
+
+class PlaylistDelete(ArtistsMixin, DeleteView):
+    model = Playlist
+    success_url = reverse_lazy('myAdmin:PlayList')
+
 class ArtistView(AdministratorOnlyMixin, ListView):
     template_name =  'music/artist_list.html'
     model = Artist
@@ -83,7 +119,6 @@ class SongAddView(ArtistsMixin, View):
         form = SongForm(request.POST)
         if form.is_valid():
             songObj =form.save(commit=False)
-            songObj.artist = self.request.user
             songObj.audio = request.FILES['audio']
             songObj.save()
             temp=eyed3.load(songObj.audio.url)

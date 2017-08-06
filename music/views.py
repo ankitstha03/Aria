@@ -15,8 +15,8 @@ from myAdmin.forms import *
 from utils.views import *
 import eyed3
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
+from utils import itembased
+from django.db.models import F
 
 # Create your views here
 #class PlaylistView(UsersMixin,ListView):
@@ -42,7 +42,6 @@ class AlbumView(ListView):
     context_object_name = "album_list"
     paginate_by = 9
 
-
 class AlbumDetails(DetailView):
     model = Album
 
@@ -52,14 +51,11 @@ class ArtistView(ListView):
     context_object_name = "artist_list"
     paginate_by = 9
 
-
-
 class SongView(ListView):
     template_name =  'music/song_list2.html'
     model=Song
     context_object_name = "song_list"
     paginate_by = 9
-
 
 def ArtistAlbum(request):
     if not request.user.is_authenticated():
@@ -96,7 +92,6 @@ def ArtistAlbum(request):
             return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
         return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
 
-
 def album_detail(request, album_id):
     if not request.user.is_authenticated():
         return redirect('authen:register')
@@ -124,6 +119,7 @@ def album_detail(request, album_id):
             songObj.audio = request.FILES['audio']
             songObj.save()
             temp=eyed3.load(songObj.audio.url)
+            songObj.title=temp.tag.title
             songObj.playback_time=temp.info.time_secs
             songObj.genre=str(temp.tag.genre)
             songObj.save()
@@ -141,11 +137,15 @@ def album_detail(request, album_id):
             return render(request, 'music/album_detail.html', {'album': album, 'songs':songs, 'user': user, 'form':addSongForm})
         return render(request, 'music/album_detail.html', {'album': album,  'songs':songs, 'user': user, 'form':addSongForm})
 
-def album_detail2(request, album_id):
+def album_detail2(request, album_id, song_id=2):
         album = get_object_or_404(Album, pk=album_id)
         song_list=album.song_set.all()
-        paginator = Paginator(song_list, 9) # Show 25 contacts per page
+        # ply=PlayCount.objects.get_or_create(user=request.user, song=asd)
+        # ply.playcount+=1
+        # ply.save()
+        # sng=itembased.cos_sim(song_id)
 
+        paginator = Paginator(song_list, 9) # Show 25 contacts per page
         page = request.GET.get('page')
         try:
             songs = paginator.page(page)
@@ -155,7 +155,88 @@ def album_detail2(request, album_id):
         except EmptyPage:
             paginator = paginator.page(paginator.num_pages)
             # If page is out of range (e.g. 9999), deliver last page of results.
-        return render(request, 'music/album_detail2.html', {'album': album, 'songs':songs})
+        return render(request, 'music/album_detail2.html', {'album': album, 'songs':songs, })
+
+def albumer(request, album_id, song_id):
+        album = get_object_or_404(Album, pk=album_id)
+        song_list=album.song_set.all()
+        sad=Song.objects.filter(pk=song_id)
+        sngss=Song.objects.filter(pk=song_id)
+        cde=PlayCount.objects.filter(song=sad, user=request.user)
+        if not cde:
+            cde=PlayCount()
+            cde.user=request.user
+            cde.song=get_object_or_404(Song, pk=song_id)
+            cde.playcount=1
+            cde.save()
+        else:
+            PlayCount.objects.filter(id__in=cde).update(playcount=F('playcount')+1)
+        sng_list = itembased.cos_sim(song_id)
+        userSnglist = itembased.pearsonCorr(request.user.id)
+        recommendationList = list(set().union(sng_list,userSnglist))
+        sng = []
+        for song in recommendationList:
+            # sng = Song.objects.filter(pk=song)
+            sng.append(Song.objects.filter(pk=song))
+            #add sng to playlist
+
+        # ply=PlayCount.objects.get_or_create(user=request.user, song=asd)
+        # ply.playcount+=1
+        # ply.save()
+        # sng=itembased.cos_sim(song_id)
+
+        paginator = Paginator(song_list, 9) # Show 25 contacts per page
+        page = request.GET.get('page')
+        try:
+            songs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            songs = paginator.page(1)
+        except EmptyPage:
+            paginator = paginator.page(paginator.num_pages)
+            # If page is out of range (e.g. 9999), deliver last page of results.
+        return render(request, 'music/album_detail2.html', {'album': album, 'songs':songs, 'sng':sng , 'sngss':sngss})
+        #return playlist
+
+def songer(request, song_id):
+        song_list=Song.objects.all()
+        sad=Song.objects.filter(pk=song_id)
+        sngss=Song.objects.filter(pk=song_id)
+        cde=PlayCount.objects.filter(song=sad, user=request.user)
+        if not cde:
+            cde=PlayCount()
+            cde.user=request.user
+            cde.song=get_object_or_404(Song, pk=song_id)
+            cde.playcount=1
+            cde.save()
+        else:
+            PlayCount.objects.filter(id__in=cde).update(playcount=F('playcount')+1)
+        sng_list = itembased.cos_sim(song_id)
+        userSnglist = itembased.pearsonCorr(request.user.id)
+        recommendationList = list(set().union(sng_list,userSnglist))
+        sng = []
+        for song in recommendationList:
+            # sng = Song.objects.filter(pk=song)
+            sng.append(Song.objects.filter(pk=song))
+            #add sng to playlist
+
+        # ply=PlayCount.objects.get_or_create(user=request.user, song=asd)
+        # ply.playcount+=1
+        # ply.save()
+        # sng=itembased.cos_sim(song_id)
+
+        paginator = Paginator(song_list, 9) # Show 25 contacts per page
+        page = request.GET.get('page')
+        try:
+            songs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            songs = paginator.page(1)
+        except EmptyPage:
+            paginator = paginator.page(paginator.num_pages)
+            # If page is out of range (e.g. 9999), deliver last page of results.
+        return render(request, 'music/song_list2.html', { 'song_list':songs, 'sng':sng , 'sngss':sngss})
+
 
 def artist_detail(request, artist_id):
         artist = get_object_or_404(Artist, pk=artist_id)
@@ -171,7 +252,41 @@ def artist_detail(request, artist_id):
             songs = paginator.page(1)
         except EmptyPage:
             paginator = paginator.page(paginator.num_pages)
-        return render(request, 'music/artist_detail.html', {'artist': artist, 'songs':songs, 'user1':user1 })
+        return render(request, 'music/artist_detail.html', {'artist': artist, 'songs':songs, 'user1':user1  })
+
+def artister(request, artist_id, song_id):
+        artist = get_object_or_404(Artist, pk=artist_id)
+        user1=get_object_or_404(User, first_name=artist.name)
+        song_list=user1.song_set.all()
+        sad=Song.objects.filter(pk=song_id)
+        sngss=Song.objects.filter(pk=song_id)
+        cde=PlayCount.objects.filter(song=sad, user=request.user)
+        if not cde:
+            cde=PlayCount()
+            cde.user=request.user
+            cde.song=get_object_or_404(Song, pk=song_id)
+            cde.playcount=1
+            cde.save()
+        else:
+            PlayCount.objects.filter(id__in=cde).update(playcount=F('playcount')+1)
+        sng_list = itembased.cos_sim(song_id)
+        userSnglist = itembased.pearsonCorr(request.user.id)
+        recommendationList = list(set().union(sng_list,userSnglist))
+        sng = []
+        for song in recommendationList:
+            # sng = Song.objects.filter(pk=song)
+            sng.append(Song.objects.filter(pk=song))
+        paginator = Paginator(song_list, 9) # Show 25 contacts per page
+
+        page = request.GET.get('page')
+        try:
+            songs = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            songs = paginator.page(1)
+        except EmptyPage:
+            paginator = paginator.page(paginator.num_pages)
+        return render(request, 'music/artist_detail.html', {'artist': artist, 'songs':songs, 'user1':user1, 'sng':sng , 'sngss':sngss })
 
 def delete_album(request, album_id):
     addAlbumForm = AlbumForm()
@@ -190,7 +305,6 @@ def delete_album(request, album_id):
         # If page is out of range (e.g. 9999), deliver last page of results.
         paginator = paginator.page(paginator.num_pages)
     return render(request, 'music/album_list3.html', {'albums': albums, 'form':addAlbumForm})
-
 
 def delete_song(request, album_id, song_id):
     user = request.user
@@ -244,6 +358,39 @@ def playlist_detail2(request, playlist_id):
         paginator = paginator.page(paginator.num_pages)
     return render(request, 'music/playlist_detail2.html', {'playlist': playlist, 'songs':songs})
 
+def playlister(request, playlist_id, song_id):
+    playlist = get_object_or_404(Playlist, pk=playlist_id)
+    song_list=playlist.songs.all()
+    sad=Song.objects.filter(pk=song_id)
+    sngss=Song.objects.filter(pk=song_id)
+    cde=PlayCount.objects.filter(song=sad, user=request.user)
+    if not cde:
+        cde=PlayCount()
+        cde.user=request.user
+        cde.song=get_object_or_404(Song, pk=song_id)
+        cde.playcount=1
+        cde.save()
+    else:
+        PlayCount.objects.filter(id__in=cde).update(playcount=F('playcount')+1)
+    sng_list = itembased.cos_sim(song_id)
+    userSnglist = itembased.pearsonCorr(request.user.id)
+    recommendationList = list(set().union(sng_list,userSnglist))
+    sng = []
+    for song in recommendationList:
+        # sng = Song.objects.filter(pk=song)
+        sng.append(Song.objects.filter(pk=song))
+    paginator = Paginator(song_list, 9) # Show 25 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        songs = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        songs = paginator.page(1)
+    except EmptyPage:
+        paginator = paginator.page(paginator.num_pages)
+    return render(request, 'music/playlist_detail2.html', {'playlist': playlist, 'songs':songs, 'sng':sng , 'sngss':sngss})
+
 def playlist_detail(request, playlist_id):
     playlist = get_object_or_404(Playlist, pk=playlist_id)
     song_list=Song.objects.all()
@@ -258,7 +405,6 @@ def playlist_detail(request, playlist_id):
     except EmptyPage:
         paginator = paginator.page(paginator.num_pages)
     return render(request, 'music/playlist_detail.html', {'playlist': playlist, 'songss':songss})
-
 
 def add_playlist(request, playlist_id, song_id):
     playlist = Playlist.objects.get(pk=playlist_id)
@@ -291,7 +437,6 @@ def remove_playlist(request, playlist_id, song_id):
     except EmptyPage:
         paginator = paginator.page(paginator.num_pages)
     return render(request, 'music/playlist_detail.html', {'playlist': playlist, 'songss':songss})
-
 
 def UserPlayList(request):
     if not request.user.is_authenticated():
@@ -328,7 +473,6 @@ def UserPlayList(request):
             return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
         return render(request, 'music/play_list.html', {'playlists': playlists, 'form':addPlaylistForm})
 
-
 class PlaylistAddView(UsersMixin, View):
    template_name = 'music/playlist_form.html'
 
@@ -347,13 +491,11 @@ class PlaylistAddView(UsersMixin, View):
        else:
            return render(request, self.template_name, {'form': form, 'msg_error': "There Seems to be Some Problem. Please See Below !"})
 
-
 class PlaylistView(ListView):
     template_name =  'music/playlist_list2.html'
     model = Playlist
     context_object_name = "playlist_list"
     paginate_by = 9
-
 
 class PlaylistCreate(CreateView):
     model = Playlist

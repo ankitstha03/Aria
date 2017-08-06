@@ -20,7 +20,7 @@ class AlbumForm(forms.ModelForm):
 class SongForm(forms.ModelForm):
     class Meta:
         model = Song
-        fields = ['album', 'audio']
+        fields = ['album', 'artist', 'audio']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

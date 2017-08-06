@@ -1,12 +1,13 @@
 """Implementation of models from ERD"""
 
 
-
 from __future__ import unicode_literals
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from django.utils.translation import ugettext_lazy as _
 from utils.models import CreationModificationDateMixin
 from django.contrib import admin
+import uuid
 from authentication.models import UserProfiles
 from django.contrib.auth import get_user_model
 
@@ -66,3 +67,7 @@ class PlayCount(CreationModificationDateMixin):
     user = models.ForeignKey(User)
     song = models.ForeignKey(Song)
     playcount = models.IntegerField(default=0)
+
+class Tags(CreationModificationDateMixin):
+    song = models.ForeignKey(Song)
+    tag = JSONField()
